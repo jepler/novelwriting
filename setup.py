@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 name="Novelwriting"
-version="0.2"
+version="0.2.1"
 DOCDIR="/usr/share/doc/%s-%s" % (name, version)
 setup(
     name=name,
