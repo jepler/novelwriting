@@ -3,7 +3,7 @@
 <TITLE> Novelwriting: random structured document generation in Python </TITLE>
 <STYLE>
 pre { margin-left: 3em; margin-right: 3em; border: solid blue 2px;
-	background-color: #c0c0ff; color: #000000; }
+	padding: 1ex; background-color: #c0c0ff; color: #000000; }
 </STYLE>
 </HEAD>
 
@@ -47,8 +47,9 @@ My mother once said that no-one expects the Spanish Inquisition.
 Cardinal Fang once said that a stitch in time saves nine.
 </PRE>
 
-<H1>The grammar of .nw files</H1>
+<H1>The structure of .nw files</H1>
 
+<H2> Tokens </H2>
 <P>Outside of a token, whitespace is ignored.
 
 <P>Comments begin with a "#" and continue until the end of the line.
@@ -88,6 +89,7 @@ or simply 0.  For instance, these are all numbers:
     <LI><TT>999</TT>
 </UL>
 
+<H2> Grammar </H2>
 <P>The grammar includes other tokens.  In the rules below, the required
 sequence of characters is shown inside quotation marks.  "?" follows
 an optional item, "*" signals zero-or-more and "+" signals 1 or more of
@@ -116,8 +118,8 @@ alt: seq ["|" seq]*;
 
 <P>A sequence is composed repetitions or groups:
 <PRE>
-seq: rep | "[" alt "]";
-rep: atom ["*" | "+" | "?"]?;
+rep: atom rep-tail | "[" alt "]" rep-tail;
+rep-tail: ["*" | "+" | "?"]?
 </PRE>
 
 <P>An atom is a Name with optional arguments, a String, or a call:
@@ -177,6 +179,8 @@ cat: "Tiddles" | "Fluffy" ;
 ;;
 from novelwriting.calls import expand
 </PRE>
+(be very careful that the argument to @expand is <em>exactly</em> the name
+of the rule.  In particular, it can be very hard to see that the problem is due to whitespace at either end of the rule name.
 
 <H1>Using "@-calls" (increasing novelwriting's power with Python)</H1>
 

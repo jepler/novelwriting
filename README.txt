@@ -31,7 +31,9 @@ Two possible outputs from the grammar
  My mother once said that no-one expects the Spanish Inquisition.
  Cardinal Fang once said that a stitch in time saves nine.
 
-                            The grammar of .nw files
+                           The structure of .nw files
+
+Tokens
 
    Outside of a token, whitespace is ignored.
 
@@ -69,6 +71,8 @@ Two possible outputs from the grammar
      * -10
      * 999
 
+Grammar
+
    The grammar includes other tokens. In the rules below, the required
    sequence of characters is shown inside quotation marks. "?" follows an
    optional item, "*" signals zero-or-more and "+" signals 1 or more of the
@@ -95,8 +99,8 @@ Two possible outputs from the grammar
 
    A sequence is composed repetitions or groups:
 
- seq: rep | "[" alt "]";
- rep: atom ["*" | "+" | "?"]?;
+ rep: atom rep-tail | "[" alt "]" rep-tail;
+ rep-tail: ["*" | "+" | "?"]?
 
    An atom is a Name with optional arguments, a String, or a call:
 
@@ -155,6 +159,10 @@ Two possible outputs from the grammar
  cat: "Tiddles" | "Fluffy" ;
  ;;
  from novelwriting.calls import expand
+
+   (be very careful that the argument to @expand is exactly the name of the
+   rule. In particular, it can be very hard to see that the problem is due to
+   whitespace at either end of the rule name.
 
          Using "@-calls" (increasing novelwriting's power with Python)
 
