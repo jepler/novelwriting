@@ -1,0 +1,8 @@
+include README.*
+include TODO.txt
+include examples/*.nw
+include novelwriting/*.py
+include novelwriting/gram.g
+exclude novelwriting/gram.py
+include scripts/novelwriting
+include setup.py
