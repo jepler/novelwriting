@@ -1,10 +1,12 @@
+# A parody of software release notes for a program I develop
+
 Start:
     @discard(
         @set(release-version, @make-version-before(99))
         @set(release-grade, make-grade)
         )
     html-header
-    @repeat(relnote-item, 20, 100)
+    @random-repeat(relnote-item, 20, 100)
     html-footer;
 
 html-header:
@@ -22,9 +24,7 @@ title:
     "Release notes for SDS/2 Steel Detailing System"
     " version 6.3" @get(release-version) " " @get(release-grade);
 
-pr-number: "(PR " @randint(100, 7000) ")";
 prs: @prs();
-prs-unused: pr-number (" " pr-number)*;
 
 relnote-item: "<LI>" relnote-expl ".  " prs "<P>";
 
@@ -82,46 +82,13 @@ make-grade: "Release" | "Beta" | "Beta" | "Alpha";
 
 ;;
 import random
+from novelwriting.calls import get, set, discard, alternative, cap_first, \
+	random_repeat
 
 def make_version_before(num):
     if not isinstance(num, int):
         num = int(str(num))
     return "%02d" % random.randint(0, num-1)
-
-def discard(arg):
-    str(arg)
-    return ""
-
-d = {}
-def set(name, val):
-    name = name.parts[0].name
-    d[name] = str(val)
-    return d[name]
-
-def get(name):
-    name = name.parts[0].name
-    return d[name]
-
-def alternative(rule, excluded):
-    e = str(excluded)
-    while 1:
-        s = str(rule)
-        if s != e: return s
-
-def cap_first(rule):
-    rule = str(rule)
-    return rule[:1].upper() + rule[1:]
-
-def repeat(rule, min, max):
-    ret = []
-    for i in range(0, random.randint(min, max)):
-        ret.append(str(rule))
-    return "".join(ret)
-
-def randint(min, max):
-    min = int(str(min))
-    max = int(str(max))
-    return str(random.randint(min, max))
 
 def prs():
     count = random.randint(1, 2) + random.randint(0, 2)

@@ -6,10 +6,15 @@ examples/buy.nw
 examples/nw.nw
 examples/release.nw
 examples/simple.nw
+examples/test-include.nw
+examples/test-included.nw
+examples/test-string.nw
 examples/test.nw
 novelwriting/__init__.py
+novelwriting/calls.py
 novelwriting/driver.py
 novelwriting/gram.g
 novelwriting/main.py
 novelwriting/yapps.py
 scripts/novelwriting
+scripts/novelwriting.cgi

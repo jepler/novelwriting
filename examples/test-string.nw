@@ -1,0 +1,5 @@
+Start: regular-string backslash-string backslash-quote-string;
+
+regular-string: "abc";
+backslash-string: "def\n";
+backslash-quote-string: "\"ghi\"";

@@ -275,7 +275,7 @@ class ScannerGenerator:
 	file.write("    def __init__(self, str):\n")
 	file.write("        Scanner.__init__(self,[\n")
 	for p in self.patterns:
-	    file.write("            " + `p` + ",\n")
+	    file.write("            (" + `p[0]` + ", " + p[1] + "),\n")
 	file.write("            ], "+`self.ignore`+", str)\n")
 	file.write("\n")
     
@@ -1008,7 +1008,7 @@ def generate(inputfilename, outputfilename='', embed=[]):
 	    k = t
 	    ignore.append(k)
 	terminals.append(k)
-	patterns.append( (k, eval(t, {}, {})) )
+	patterns.append( (k, t) )
 	
     grammar = {}
     nonterminals = []
@@ -1022,7 +1022,8 @@ def generate(inputfilename, outputfilename='', embed=[]):
 		if (g not in nonterminals) and (g not in terminals):
 		    if regex.match(Patterns.STR, g) >= 0:
 			# Only do this if it's a string literal
-			patterns.insert( 0, (g, eval(g, {}, {})) )
+			#patterns.insert( 0, (g, eval(g, {}, {})) )
+			patterns.insert( 0, (g, g) )
 			terminals.append(g)
 		    else:
 			# What the heck is it?

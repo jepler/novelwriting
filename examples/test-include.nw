@@ -1,0 +1,4 @@
+include "test-included.nw"
+
+Start: included-rule;
+;;

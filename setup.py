@@ -58,7 +58,7 @@ class build_py_yapps(build_py):
 #        return len(e.sources) == 1 and e.sources[0].endswith(".g")
 
 name="Novelwriting"
-version="0.2.1"
+version="0.3"
 DOCDIR="/usr/share/doc/%s-%s" % (name, version)
 setup(
     name=name,
@@ -68,10 +68,8 @@ setup(
     author_email="jepler@unpythonic.net",
     url="http://unpythonic.net/jeff/novelwriting/",
     packages=['novelwriting'],
-    scripts=['scripts/novelwriting'],
-    data_files=[(DOCDIR + "/examples",
-                    [ "examples/buy.nw", "examples/nw.nw",
-                      "examples/simple.nw", "examples/test.nw"]),
+    scripts=['scripts/novelwriting', 'scripts/novelwriting.cgi'],
+    data_files=[(DOCDIR + "/examples", glob("examples/*.nw")),
                 (DOCDIR, ["README.html", "novelwriting/gram.g"])],
 #    ext_modules=[Extension("novelwriting.gram", ["novelwriting/gram.g"])],
     cmdclass={'build_py': build_py_yapps},
