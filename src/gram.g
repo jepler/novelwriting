@@ -12,7 +12,7 @@ parser NovelWriting:
     ignore: "[ \t\n\r]+"
     token Name: "[a-zA-Z_][-a-zA-Z0-9_]*"
     token String: "\"(\\.|[^\"]*)\""
-    token Number: "[1-9][0-9]*|0"
+    token Number: "-?[1-9][0-9]*|0"
 
     rule start: prods ";;"      -> << go(prods) >>
     rule prods: prod prod_tail  -> << prod >>
@@ -33,7 +33,10 @@ parser NovelWriting:
         | "[?]"                   -> << driver.Alternatives("", a) >>
     rule atom: Name             -> << driver.Reference(Name) >>
         | String                -> << eval(String) >>
-        | '@' Name "[(]" args "[)]" -> << driver.Call(Name, args) >>
+        | '@' dname "[(]" args "[)]" -> << driver.Call(dname, args) >>
+    rule dname: Name dname_tail -> << ".".join([Name] + dname_tail) >>
+    rule dname_tail:            -> << [] >>
+        | "." Name dname_tail   -> << [Name] + dname_tail >>
     rule args: arg args_tail    -> << [arg] + args_tail >>
     rule args_tail:             -> << [] >>
         | "," arg args_tail     -> << [arg] + args_tail >>

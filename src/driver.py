@@ -87,7 +87,7 @@ class Call(Concatable):
         self.args = args
 
     def __str__(self):
-        fun = __import__("__main__").__dict__[self.fun_name]
+        fun = eval(self.fun_name, __import__("__main__").__dict__)
         return fun(*self.args)
 
 class Pluralize(Concatable):
