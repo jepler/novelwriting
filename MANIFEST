@@ -4,3 +4,9 @@ novelwriting/driver.py
 novelwriting/gram.py
 novelwriting/main.py
 novelwriting/yapps.py
+examples/buy.nw
+examples/nw.nw
+examples/simple.nw
+examples/test.nw
+README
+README.html
