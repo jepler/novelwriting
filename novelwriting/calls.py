@@ -2,12 +2,12 @@ import random, novelwriting.driver
 
 d = {}
 def set(name, val):
-    name = name.parts[0].name
+    name = name.name
     d[name] = str(val)
     return d[name]
 
 def get(name, default=None):
-    name = name.parts[0].name
+    name = name.name
     if not d.has_key(name) and default is not None:
         d[name] = str(default)
     return d[name]
@@ -62,14 +62,14 @@ def laundry_list(ref, rule):
     return s
 
 def unset(s):
-	s = s.parts[0].name
+	s = s.name
 	try:
 		del d[s]
 	except KeyError: pass
 	return ""
 
 def if_set(cond, if_true, if_false):
-	if cond.parts[0].name in d:
+	if cond.name in d:
 		return str(if_true)
 	return str(if_false)
 

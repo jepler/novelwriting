@@ -1,10 +1,14 @@
 import traceback, sys
+import driver
 def format_one_frame(t):
 	if not t.tb_frame.f_locals.has_key("self"):
 		traceback.print_tb(t, 1)
 		return
 	s = t.tb_frame.f_locals['self']
-	print >>sys.stderr, "  Expanding", repr(s)
+	if isinstance(s, (driver.Alternatives, driver.Sequence, driver.Rule, driver.Reference, driver.Call)):
+		print >>sys.stderr, "  Expanding", repr(s)
+	else:
+		traceback.print_tb(t, 1)
 
 def novelwriting_except_hook(ec, c, t):
 	global gec, gc, gt

@@ -302,12 +302,10 @@ def ignore(s):
 
 llist = {}
 def laundry_list_init(ref):
-    ref = ref.parts[0]
     llist[ref.name] = {}
     return ""
 
 def laundry_list(ref, rule):
-    ref = ref.parts[0]
     l = llist[ref.name]
     for i in range(100):
         s = str(rule)

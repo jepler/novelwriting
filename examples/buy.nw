@@ -9,12 +9,12 @@ product-noun: "spam" | "parrot" | "python";
 
 d = {}
 def set(name, val):
-    name = name.parts[0].name
+    name = name.name
     d[name] = str(val)
     return d[name]
 
 def get(name):
-    name = name.parts[0].name
+    name = name.name
     return d[name]
 
 def alternative(rule, excluded):

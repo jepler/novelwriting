@@ -1,3 +1,4 @@
+from driver import Rule, alternatives, sequence, Call, Reference
 import driver
 
 def go(prods):
@@ -5,6 +6,7 @@ def go(prods):
         start_rule = driver.rules['Start']
     else:
         start_rule = prods[0]
+    print repr(start_rule)
     print str(start_rule)
 
 def include(name):
@@ -29,12 +31,12 @@ parser NovelWriting:
     rule prods: prod prod_tail  -> << prod + prod_tail >>
     rule prod_tail:             -> << [] >>
         | prod prod_tail        -> << prod + prod_tail >>
-    rule prod: Name opt_params ":" alt ";" -> << [driver.Rule(Name, alt, opt_params)] >>
+    rule prod: Name opt_params ":" alt ";" -> << [Rule(Name, alt, opt_params)] >>
         | "include" String      -> << include(String) >>
-    rule alt: seq alt_tail      -> << driver.Alternatives(*[seq] + alt_tail) >>
+    rule alt: seq alt_tail      -> << alternatives(*[seq] + alt_tail) >>
         rule alt_tail:          -> << [] >>
         | "[|]" seq alt_tail    -> << [seq] + alt_tail >>
-    rule seq: rep seq_tail      -> << driver.Sequence(*[rep] + seq_tail) >>
+    rule seq: rep seq_tail      -> << sequence(*[rep] + seq_tail) >>
     rule seq_tail:              -> << [] >>
         | rep seq_tail          -> << [rep] + seq_tail >>
     rule rep: atom rep_tail<<atom>>   -> << rep_tail >>
@@ -42,10 +44,10 @@ parser NovelWriting:
     rule rep_tail<<a>>:         -> << a >>
         | "[*]"                 -> << driver.Star(a) >>
         | "[+]"                 -> << driver.Plus(a) >>
-        | "[?]"                 -> << driver.Alternatives("", a) >>
-    rule atom: Name opt_args    -> << driver.Reference(Name, opt_args) >>
+        | "[?]"                 -> << alternatives("", a) >>
+    rule atom: Name opt_args    -> << Reference(Name, opt_args) >>
         | String                -> << eval(String, {}, {}) >>
-        | '@' dname "[(]" args "[)]" -> << driver.Call(dname, args) >>
+        | '@' dname "[(]" args "[)]" -> << Call(dname, args) >>
     rule dname: Name dname_tail -> << ".".join([Name] + dname_tail) >>
     rule dname_tail:            -> << [] >>
         | "." Name dname_tail   -> << [Name] + dname_tail >>

@@ -46,6 +46,12 @@ class Alternatives(Concatable):
     def __repr__(self): return "<Alternatives %s>" % map(short, self.alternatives)
     def __short__(self): return "<Alternatives>"
 
+def alternatives(*alts):
+    a = weight(alts)[0]
+    if len(a) == 1:
+        return a[0][1]
+    return Alternatives(*alts)
+
 class Sequence(Concatable):
     def __init__(self, *parts):
         self.parts = parts
@@ -59,6 +65,10 @@ class Sequence(Concatable):
 
     def __repr__(self): return "<Sequence %s>" % map(short, self.parts)
     def __short__(self): return "<Sequence>"
+
+def sequence(*parts):
+    if len(parts) == 1: return parts[0]
+    return Sequence(*parts)
 
 rules = {}
 _anon_ruleno = 0
@@ -109,10 +119,6 @@ def Star(body):
 def Plus(body):
     return Star(body) + body
 
-#def pluralize(r):
-#        if r.endswith("y"): return r[:-1] + "ies"
-#        return r+"s"
-
 class Call(Concatable):
     def __init__(self, fun_name, args):
         self.fun_name = fun_name.replace("-", "_")
@@ -120,9 +126,12 @@ class Call(Concatable):
 
     def __str__(self):
         fun = eval(self.fun_name, __import__("__main__").__dict__)
-        return fun(*self.args)
+        ret = fun(*self.args)
+        if ret is None: return ""
+        return str(ret)
 
-    def __repr__(self): return "<Call %s %s>" % (self.fun_name, short(self.args))
+    def __repr__(self):
+        return "<Call %s %s>" % (self.fun_name, short(self.args))
 
     def __short__(self): return "<Call %s>" % self.fun_name
 
@@ -131,7 +140,11 @@ class Pluralize(Concatable):
         self.rule = rule
 
     def __str__(self):
-        r = str(self.rule)
+        return str(self.rule) + "s"
+
+def short(x):
+    if hasattr(x, "__short__"): return x.__short__()
+    return repr(x)
 
 if __name__ == '__main__':
     C = Rule("C", Alternatives("a", "b", (.5, "c")))
@@ -150,9 +163,5 @@ if __name__ == '__main__':
 
     for i in range(10):
         print Joke
-
-def short(x):
-    if hasattr(x, "__short__"): return x.__short__()
-    return repr(x)
 
 # vim:sw=4:sts=4:et:

@@ -34,12 +34,10 @@ def pluralize(x):
 
 llist = {}
 def laundry_list_init(ref):
-    ref = ref.parts[0]
     llist[ref.name] = {}
     return ""
 
 def laundry_list(ref, rule):
-    ref = ref.parts[0]
     l = llist[ref.name]
     for i in range(100):
         s = str(rule)
@@ -50,12 +48,12 @@ def laundry_list(ref, rule):
 
 vars = {}
 def set(ref, rule):
-    ref = ref.parts[0].name
+    ref = ref.name
     vars[ref] = str(rule)
     return vars[ref]
 
 def get(ref):
-    ref = ref.parts[0].name
+    ref = ref.name
     return vars[ref]
 
 def repeat(rule, count, sep=""):
