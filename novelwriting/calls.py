@@ -61,8 +61,35 @@ def laundry_list(ref, rule):
     l[s] = None
     return s
 
+def unset(s):
+	s = s.parts[0].name
+	try:
+		del d[s]
+	except KeyError: pass
+	return ""
+
+def if_set(cond, if_true, if_false):
+	if cond.parts[0].name in d:
+		return str(if_true)
+	return str(if_false)
+
+def if_eq(a, b, if_true, if_false):
+	a = str(a)
+	b = str(b)
+	if a == b:
+		return str(if_true)
+	else:
+		return str(if_false)
+
+
 def expand(s):
         s = str(s)
         r = novelwriting.driver.rules[s]
         return str(r)
+
+def possessive(s):
+	s = str(s)
+	if s.endswith("s"): return s + "'"
+	return s + "'s"
+
 

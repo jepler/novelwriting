@@ -43,6 +43,8 @@ class Alternatives(Concatable):
             if r < i:
                 return str(j)
 
+    def __repr__(self): return "<Alternatives %s>" % map(short, self.alternatives)
+    def __short__(self): return "<Alternatives>"
 
 class Sequence(Concatable):
     def __init__(self, *parts):
@@ -54,6 +56,9 @@ class Sequence(Concatable):
         if isinstance(other, Sequence):
             return Sequence(*(self.parts + other.parts))
         return Sequence(*(self.parts + (other,)))
+
+    def __repr__(self): return "<Sequence %s>" % map(short, self.parts)
+    def __short__(self): return "<Sequence>"
 
 rules = {}
 _anon_ruleno = 0
@@ -83,6 +88,7 @@ class Reference(Concatable):
         ret = str(rules[self.name])
         rules = old_rules
         return ret
+    def __repr__(self): return "<Reference %s>" % self.name
 
 class Rule(Concatable):
     def __init__(self, name, body, args=[]):
@@ -93,6 +99,8 @@ class Rule(Concatable):
 
     def __str__(self):
         return str(self.body)
+
+    def __repr__(self): return "<Rule %s>" % self.name
 
 def Star(body):
     r = Reference()
@@ -113,6 +121,10 @@ class Call(Concatable):
     def __str__(self):
         fun = eval(self.fun_name, __import__("__main__").__dict__)
         return fun(*self.args)
+
+    def __repr__(self): return "<Call %s %s>" % (self.fun_name, short(self.args))
+
+    def __short__(self): return "<Call %s>" % self.fun_name
 
 class Pluralize(Concatable):
     def __init__(self, rule):
@@ -138,5 +150,9 @@ if __name__ == '__main__':
 
     for i in range(10):
         print Joke
+
+def short(x):
+    if hasattr(x, "__short__"): return x.__short__()
+    return repr(x)
 
 # vim:sw=4:sts=4:et:

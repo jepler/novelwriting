@@ -53,7 +53,7 @@ parser NovelWriting:
         | arg args_tail         -> << [arg] + args_tail >>
     rule args_tail:             -> << [] >>
         | "," arg args_tail     -> << [arg] + args_tail >>
-    rule arg: seq               -> << seq >>
+    rule arg: alt               -> << alt >>
         | Number                -> << int(Number) >>
     rule opt_args:              -> << [] >>
         | "[(]" args "[)]"      -> << args >>
