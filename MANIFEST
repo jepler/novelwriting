@@ -4,10 +4,13 @@ TODO.txt
 setup.py
 examples/buy.nw
 examples/nw.nw
+examples/param.nw
 examples/release.nw
+examples/rottenflesh.nw
 examples/simple.nw
 examples/test-include.nw
 examples/test-included.nw
+examples/test-param.nw
 examples/test-string.nw
 examples/test.nw
 novelwriting/__init__.py

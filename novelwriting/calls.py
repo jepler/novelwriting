@@ -6,8 +6,10 @@ def set(name, val):
     d[name] = str(val)
     return d[name]
 
-def get(name):
+def get(name, default=None):
     name = name.parts[0].name
+    if not d.has_key(name) and default is not None:
+        d[name] = str(default)
     return d[name]
 
 def alternative(rule, excluded):

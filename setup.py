@@ -30,7 +30,7 @@ class build_py_yapps(build_py):
             return build_py.build_module(self, module, module_file, package)
 
 name="Novelwriting"
-version="0.4"
+version="0.4.1"
 DOCDIR="/usr/share/doc/%s-%s" % (name, version)
 setup(
     name=name,

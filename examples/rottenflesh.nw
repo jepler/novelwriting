@@ -1,0 +1,341 @@
+#include <stdmap.pbi>
+#include <format.pbi>
+
+#ifndef SEED
+#define SEED 0
+#endif
+
+Start: S;
+
+fm-header:
+"<HTML>"
+"<HEAD>"
+"<title>rottenflesh.net: Crap announced " @today() "</title>"
+"<style type=\"text/css\">"
+"<!--"
+"BODY { margin: 0; padding: 0; }"
+"BODY, P, DIV, TD, TH, TR, FORM, OL, UL, LI, INPUT, TEXTAREA, SELECT, A { font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif; }"
+"A:hover  { text-decoration: none; } "
+"A  { text-decoration: underline; } "
+".code { font-family: Courier, \"Courier New\", Monospaced, Serif; }"
+"-->"
+"</style>"
+""
+"</head>"
+""
+"<body bgcolor=\"#FFFFFF\" link=\"#3366CC\" vlink=\"#3366CC\" alink=\"#3366CC\" text=\"#000000\">";
+
+fm-footer:
+hr
+@link-me("Hurt me again", "")
+"<BR>" @link-me("URL to generate the same page again")
+"</body>";
+
+fm-sidebar: "Recent Releases: <small>"
+ten-programs
+ten-programs
+ten-programs
+ten-programs "</small>";
+
+ten-programs: one-program one-program one-program one-program one-program one-program one-program one-program one-program one-program;
+one-program: "<P>&nbsp;-&nbsp;<A HREF=\"#\">" new-progname " " new-version"</A>";
+
+opt-branch: " " branch | "";
+branch: "(unstable)" | "(inhumane)" | "(bugridden)" | "(pants)";
+
+ten-releases: release hr release hr release hr release hr release hr release hr release hr release hr release hr release;
+
+hr: "<hr align=center size=1 noshade width=100%>";
+
+S: @laundry-list-init(Progname) fm-header
+"<table><tr>"
+    "<td valign=top width=90%>" @ten-releases()
+    "<td valign=top style=\"background-color: #c0c0c0\" width=10%>" fm-sidebar
+"</table>" fm-footer;
+
+release: make-progname make-version make-cloneof
+    "\n\n\n"
+    "<table> <tr> <td><img src=http://images.freshmeat.net/button.gif>"
+    "<td valign=top>"title byline
+    "</table>"
+    "\n" about changes info"\n\n";
+
+title: 
+    "<font size=+1 color=#000000><a href=#>" progname " " version opt-branch "</a></font>\n" ;
+
+make-progname: @ignore(@set(v-progname,new-progname));
+make-version: @make-version();
+make-cloneof: @ignore(@set(v-clone,obscure-technology));
+clone-prog-name: new-progname | coreunix-program;
+
+
+progname: @get(v-progname,new-progname);
+new-progname: @laundry-list(Progname, any-progname);
+any-progname: [strange-adj " " frag | strange-adj @upcase-first(progword)];
+progword: [ strange-noun |"" ] frag ;
+buzzword: buzzword-adjective|buzzword-noun;
+buzzword-adjective: "3d"|"Aspect"|"GPL"|"GNU"|"net"|"enterprise"|"Web"|"open";
+buzzword-noun: "OpenGL"|"XML"|"java"|"python"|"SAX"|"Linux"|"BSD"|"ASCII"|"p2p"|"XHTML"|"HTML"|"Mozilla"|"Gecko"|"C++"|"C#"|"g++"|"gcc"|"php"|"CGI"|"perl"|"DNA"|"quake"|".net"|"mono";
+coreunix-program: "cron"|"rm"|"mv"|"vi"|"emacs"|"cat"|"sshd"|"X-Windows" | "bash" | "sh" | "ksh";
+coreunix-protocol: "SMTP"|"HTTP"|"FTP"|"ssl"|"ssh"|"daygen"|"chargen"|"echo"|"rfc" digit digit digit opt-digit | "xlib";
+terrible-language: "BASIC" | "C#" | "Pascal" | "Perl" | "PHP" | "Intercal" | "Orthagonal" | "Oberon" | "Tcl" | "oCaml" | "lisp" | "bash" | "C++" | "whitespace";
+buzz-or-core: buzzword | buzzword | coreunix-program | coreunix-protocol;
+frags: frag | frag frag | frag frag;
+frag: letter letter | buzz-or-core uppercase-letter | letter letter buzz-or-core | letter "-" buzz-or-core | buzz-or-core "-" buzz-or-core;
+letter: uppercase-letter | lowercase-letter;
+lowercase-letter: "a"|"b"|"c"|"d"|"e"|"f"|"g"|"h"|"i"|"j"|"k"|"l"|"m"|"n"|"o"|"p"|"q"|"r"|"s"|"t"|"u"|"v"|"w"|"x"|"y"|"z";
+uppercase-letter: "A"|"B"|"C"|"D"|"E"|"F"|"G"|"H"|"I"|"J"|"K"|"L"|"M"|"N"|"O"|"P"|"Q"|"R"|"S"|"T"|"U"|"V"|"W"|"X"|"Y"|"Z";
+digit: "1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"0";
+opt-digit: digit | "";
+
+strange-noun: "grape"|"crazy"|"donkey"|"frotz"|"jump"|"OS"|"geek"|"penguin"|"tux";
+strange-adj: "open"|"free"|"net"|"ascii"|"new";
+opt-strange-adj: "" | strange-adj;
+
+version: @get(v-version,new-version) @laundry-list-init(Features);
+new-version: ["v"|""] dotted-version opt-version-suffix;
+dotted-version: opt-digit "." digit opt-digit |
+    opt-digit "." digit opt-digit "." digit opt-digit |
+    opt-digit "." digit opt-digit "." digit opt-digit |
+    opt-digit "." digit opt-digit "." digit opt-digit ;
+version-suffix: ["-"|""] ["alpha" | "beta" | "final" | "a" | "b" | "bugfix"];
+opt-version-suffix: ""|version-suffix;
+
+byline: "<br><small><font color=#999999>by <a href=#>" name "</a></font></small>\n";
+name: @laundry-list-init(D-adj) [d-adj " "]* d-noun;
+d-adj: @laundry-list(D-adj, any-d-adj);
+any-d-adj: "illiterate"|"stupid"|"foolish"|"doglike";
+d-noun: "newbie"|"simpleton"|"zealot"|"CS freshman"|"ape-man";
+
+opt-desc-adj: desc-adj " " | desc-adj " " desc-adj " " | "";
+desc-noun-phrase: ["client" | "server" ];
+verb: "organizes" | "streams" | "generates" | "monitors" | "compiles" | "backs up" | "compresses";
+activity: "organizer" | "streamer" | "generator" | "monitor" | "compiler" | "filesystem" | "daemon" | "demon";
+about: "<P><B>About:</B> " progname " is " @a-an(prog-desc) " that " desc-verb-phrase [".  " about-technology]+  ".\n\n";
+prog-desc: opt-desc-adj desc-noun-phrase | @get(v-clone) " clone" ;
+changes: "<P><B>Changes:</B> " progname " " version " " changes-verb-phrase addl-change* ".\n";
+opt-desc-adv: "quickly" | "easily";
+desc-verb: verb;
+desc-verb-phrase: opt-desc-adv " " desc-verb " " desc-obj ;
+desc-adj: "secure" | "robust" | "small" | "fast" | "open-source" | "framework for" | "prototype" | "internet" | "intranet" | "web" | "p2p" | buzzword;
+
+progname-or-it: progname | "it";
+progname-or-It: progname | "It";
+
+task-adjective: "tediously" | "easily" | "endlessly" | "effortlessly";
+stupid-task-verb: "configure" | "stream" | "organize" | "theme" |
+    "share" | "monitor" | "compile" | "translate" | "browse" | "spoof";
+stupid-task-verb-phrase: stupid-task-verb " " [desc-obj | obscure-technology];
+
+about-technology: 
+    "With " progname ", you can " task-adjective " " stupid-task-verb-phrase |
+    [progname "'s " | "Its "] @pluralise(obscure-feature) " use " obscure-technology |
+    "It uses " obscure-technology " for " @pluralise(obscure-feature) |
+    progname-or-It " " ["also " | ""] [about-using | about-nousing] | 
+    progname-or-It " is " undesirable-feature-adj-list |
+    progname-or-It " requires " obscure-technology " " new-version [ " or greater"|""] |
+    progname-or-It " " ["also " | ""] strange-claim [" thanks to " obscure-technology|""];
+about-using: ["implements " | "generates " ] ["its "|""] @pluralise(obscure-feature) [" using " obscure-technology | " on the fly"];
+about-nousing: ["uses " | "implements " | "generates " ] ["its own "|""] @pluralise(obscure-feature);
+strange-claim: "whitens your teeth" | "freshens your breath" | 
+        "is extraterrestrial in origin" | "stays crunchy in milk" |
+        "sings comical songs" | "is safe for children";
+
+obscure-feature: @laundry-list(Features, any-obscure-feature);
+any-obscure-feature: "menubar" | "skin" | "user-interface" | "business logic" | "gradient";
+obscure-technology: new-progname | buzzword-noun | coreunix-program;
+undesirable-feature-adj-list: undesirable-feature-adj |
+    undesirable-feature-adj " and " undesirable-feature-adj |
+    undesirable-feature-adj " and " undesirable-feature-adj-list;
+    
+undesirable-feature-adj: @laundry-list(Features, any-undesirable-feature-adj);
+any-undesirable-feature-adj: "n-tier" | "skinnable" | "themable" | "bugfree" | "secure by design" | "incompatible with " [@get(v-clone) | coreunix-program | coreunix-protocol | buzzword] ;
+
+desc-obj: "your " [desc-obj-adj " " | "" ] desc-obj-noun |
+     [desc-obj-adj " " | ""] @pluralise(desc-obj-noun) ;
+desc-obj-adj: "digital" | "virtual" ;
+desc-obj-noun: "porn" | "e-mail" | "desktop" | "background";
+
+changes-verb-phrase: @laundry-list(Features, any-changes-verb-phrase);
+any-changes-verb-phrase: changes-bug | changes-feature | strange-claim | rewritten | "compiles" | "now features " obscure-feature;
+rewritten: "was rewritten " [ "in " terrible-language | "from scratch"];
+changes-bug: ["fixes" | "removes" | "patches"] " a " ["remote " | "local " | ""] ["root " | ""] ["bug " | "security problem " | "exploit " | "hole "] "in " code-part opt-situation;
+code-part: "initialization" | "configuration" | "administration" | "command-line argument parsing";
+
+changes-feature: ["adds" | "implements" | "enhances"] " " ["performance" | "fluffy bunnies" | "gore" | "security" | "robustness" | "scalability" ] opt-situation;
+addl-change: ".  " [addl-change-single | addl-change-double | @upcase-first(legal-problem)];
+addl-change-double: ["It" | version | progname " " version] " also " changes-verb-phrase " and " changes-verb-phrase;
+addl-change-single: ["It" | version | progname " " version] " also " changes-verb-phrase;
+
+legal-problem: "due to " ["a software patent" | "a lawsuit" | "the cease-and-desist letter"] ", " @pluralise(obscure-feature) " were removed" | "one of the developers was sacked" | "one of the developers was run over by a bus";
+opt-situation: " " situation | "";
+situation: "when installing" | "for remote users" | "upgrading from " @get(v-oldversion) | " for sites that also use " new-progname | "for compatability with " @get(v-clone);
+
+info:
+"<p><table cellspacing=\"1\" cellpadding=\"2\" border=\"0\" width=\"100%\" bgcolor=\"#000000\">"
+""
+"        <tr bgcolor=\"#DDDDDD\">"
+"              <th align=\"left\" width=\"40%\">&nbsp;<b><small>Categories</small></b></th>"
+"              <th width=\"20%\"><b><small>Focus</small></b></th>"
+"        <th width=\"20%\"><b><small>License</small></b></th>"
+"              <th width=\"%\"><b><small>URLs</small></b></th>"
+"            </tr>"
+"    </table>"
+""
+"    <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\" width=\"100%\">"
+"      <tr bgcolor=\"#FFFFFF\">"
+"        <td valign=\"top\" width=\"40%\">"
+info-categories
+""
+"</td>"
+"              <td align=\"center\" valign=\"top\" width=\"20%\"><small>" info-focus "</small></td>"
+"        <td align=\"center\" valign=\"top\" width=\"20%\"><small>" info-license "</small></td>"
+"              <td align=\"center\" valign=\"top\" width=\"20%\"><small>   " info-icons 
+"</small></td>"
+"            </tr>"
+"    </table>" ;
+
+
+info-categories: info-one-category "<br>" info-one-category ["<br>" info-one-category|""];
+info-one-category:
+"<a href=\"#\"><font"
+"  color=\"#000000\"><small>" info-category-name
+ "</small></font></a>";
+info-category-name: @laundry-list(Features, any-info-category-name);
+any-info-category-name: @laundry-list-init(Category) info-category-part "::" info-category-part ["::" info-category-part|""];
+info-category-part: @laundry-list(Category, any-info-category-part);
+any-info-category-part: "Semi-functional" | "Bad Ideas" | "Half-finished" | "Wankage" | "Themable" | "Segfaulting" 
+	| "Homework Assignment" | "Forked" | "Clones" | "Internet" | "Themes";
+
+info-focus: "Brown paper bag bug" | "Name change due to trademark lawsuit" | "First (and last) release" | "Cry for help" | "Suicide Note" | "Re-wrote in new language" | "Exercise in futility" | "New maintainer" | "Pointless fork";  
+
+info-license: "Pants" | "GNU General Public License" | "Bend-Over EULA" | "BSD" | "crapware" | "long and complicated" | "ambiguous" | "infringing";
+
+info-icons:
+["<a href=#><img src=\"http://images.freshmeat.net/url_homepage.gif\" width=\"16\" height=\"16\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>"|""]
+
+["      <a href=#><img src=\"http://images.freshmeat.net/url_tgz.gif\" width=\"16\" height=\"16\" alt=\"Tar/GZ\" title=\"Tar/GZ\" border=\"0\"></a>"|""]
+["      <a href=#><img src=\"http://images.freshmeat.net/url_changelog.gif\" width=\"16\" height=\"16\" alt=\"Changelog\" title=\"Changelog\" border=\"0\"></a>"|""]
+["      <a href=#><img src=\"http://images.freshmeat.net/subscribe.gif\" width=\"16\" height=\"16\" alt=\"Subscribe\" title=\"Subscribe\" border=\"0\"></a>"|""]
+["      <a href=#><img src=\"http://images.freshmeat.net/ignore.gif\" width=\"16\" height=\"16\" alt=\"Ignore\" title=\"Ignore\" border=\"0\"></a>"|""]
+["      <a href=#><img src=\"http://images.freshmeat.net/rate.gif\" width=\"16\" height=\"16\" alt=\"Rate\" title=\"Rate\" border=\"0\"></a>"|""];
+
+rf-entry: 
+"<table> <tr> <td><img src=http://images.freshmeat.net/button.gif><td valign=top><font size=+1 color=#000000><a href=\"http://unpythonic.net/~jepler/novelwriting/examples/rottenflesh.nw\">RottenFlesh 00.0.0</a></font>"
+"<br><small><font color=#999999>by <a href=\"mailto:jepler@unpythonic.net\">Jeff Epler</a></font></small>"
+"</table>"
+"<P><B>About:</B> RottenFlesh effortlessly generates parodies of stupid software submitted to freshmeat.net. With RottenFlesh, you can effortlessly mock the open-source establishment. RottenFlesh stays crunchy in milk."
+" "
+"<P><B>Changes:</B> RottenFlesh was rewritten in Novelwriting"
+"<p><table cellspacing=\"1\" cellpadding=\"2\" border=\"0\" width=\"100%\" bgcolor=\"#000000\">        <tr bgcolor=\"#DDDDDD\">"
+"<th align=\"left\" width=\"40%\">&nbsp;<b><small>Categories</small></b></th>              "
+"<th width=\"20%\"><b><small>Focus</small></b></th>        "
+"<th width=\"20%\"><b><small>License</small></b></th>              "
+"<th width=\"%\"><b><small>URLs</small></b></th>            </tr>    </table>    <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\" width=\"100%\">      <tr bgcolor=\"#FFFFFF\">        "
+"<td valign=\"top\" width=\"40%\"><a href=\"#\"><font  color=\"#000000\"><small>Internet :: Websites :: Parodies</small></font></a><br><a href=\"#\"><font  color=\"#000000\"><small>Free Time :: Excess</small></font></a></td>              "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>Major Improvements</small></td>        "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>Free to use but restricted</small></td>              "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>   "
+
+"<a href=\"http://unpythonic.net/~jepler/novelwriting/\"><img src=\"http://images.freshmeat.net/url_homepage.gif\" width=\"16\" height=\"16\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>      "
+"</tr>    </table>"
+" " ;
+
+nw-entry: 
+"<table> <tr> <td><img src=http://images.freshmeat.net/button.gif><td valign=top><font size=+1 color=#000000><a href=\"http://unpythonic.net/~jepler/novelwriting/\">Novelwriting 0.4.1</a></font>"
+"<br><small><font color=#999999>by <a href=\"mailto:jepler@unpythonic.net\">Jeff Epler</a></font></small>"
+"</table>"
+"<P><B>About:</B>  Novelwriting is a Python program to generate random structured documents based on a grammar. It is similar to the Dada Engine, but is more extensible."
+" "
+"<P><B>Changes:</B> Support for parametric rules was added.  This required an incompatible syntax change."
+"<p><table cellspacing=\"1\" cellpadding=\"2\" border=\"0\" width=\"100%\" bgcolor=\"#000000\">        <tr bgcolor=\"#DDDDDD\">"
+"<th align=\"left\" width=\"40%\">&nbsp;<b><small>Categories</small></b></th>              "
+"<th width=\"20%\"><b><small>Focus</small></b></th>        "
+"<th width=\"20%\"><b><small>License</small></b></th>              "
+"<th width=\"%\"><b><small>URLs</small></b></th>            </tr>    </table>    <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\" width=\"100%\">      <tr bgcolor=\"#FFFFFF\">        "
+"<td valign=\"top\" width=\"40%\"><a href=\"#\"><font  color=\"#000000\"><small>Programming Language :: Python</small></font></a><br><a href=\"#\"><font  color=\"#000000\"><small>Free Time :: Excess</small></font></a></td>              "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>Major Improvements</small></td>        "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>GPL</small></td>              "
+"<td align=\"center\" valign=\"top\" width=\"20%\"><small>   "
+
+"<a href=\"http://unpythonic.net/~jepler/novelwriting/\"><img src=\"http://images.freshmeat.net/url_homepage.gif\" width=\"16\" height=\"16\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>      "
+"</tr>    </table>"
+" " ;
+
+;;
+from novelwriting.calls import *
+import novelwriting.driver
+import novelwriting.calls
+import time
+
+try:
+    link_me
+except:
+    def link_me(s,t=None): return "<A HREF=\"#\">" + str(s) + "</A>"
+
+def today():
+    return time.strftime("%A, %B %e %Y")
+
+def pluralise(s):
+    s = str(s)
+    if s == "business logic": return s
+    if s.endswith("y"): return s[:-1] + "ies"
+    if s.endswith("s"): return s + "es"
+    if s == "porn": return s
+    return s + "s"
+
+def a_an(s):
+    s = str(s)
+    if s in ("XHTML", "XML", "xlib", "FTP", "HTTP", "SMTP", "mv", "rm", "ssl", "sh"):
+	return "an " + s
+    if s[0] in "aeiou":
+	return "an " + s
+    return "a " + s
+
+def upcase_first(s):
+    s = str(s)
+    return s[0].upper() + s[1:]
+
+def ignore(s):
+    str(s)
+    return ""
+
+llist = {}
+def laundry_list_init(ref):
+    ref = ref.parts[0]
+    llist[ref.name] = {}
+    return ""
+
+def laundry_list(ref, rule):
+    ref = ref.parts[0]
+    l = llist[ref.name]
+    for i in range(100):
+        s = str(rule)
+        if not s in l:
+            break
+    l[s] = None
+    return s
+
+def make_version():
+    v1 = str(expand('new-version'))
+    v2 = str(expand('new-version'))
+    novelwriting.calls.d["v-version"] = max(v1, v2)
+    novelwriting.calls.d["v-oldversion"] = min(v1, v2)
+    return ""
+
+def ten_releases():
+    rf_entry = random.randint(0, 9)
+    nw_entry = random.randint(0, 8)
+    if nw_entry >= rf_entry: nw_entry = nw_entry + 1
+
+    r = []
+    for i in range(10):
+	if i == rf_entry:
+	    r.append(expand("rf-entry"))
+	elif i == nw_entry:
+	    r.append(expand("nw-entry"))
+	else:
+	    r.append(expand("release"))
+    return expand("hr").join(r)
+
+# vim:sts=4:sw=4:

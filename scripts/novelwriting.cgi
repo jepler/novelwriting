@@ -6,6 +6,8 @@ import sys, cgi, cgitb, random, os, time
 import novelwriting.gram as gram
 import novelwriting.driver as driver
 
+cgitb.enable()
+
 fs = cgi.FieldStorage()
 f0 = fn = fs['s'].value
 if os.path.split(fn)[0]:
