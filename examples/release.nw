@@ -18,7 +18,10 @@ html-header:
     "<UL>";
 
 html-footer:
-    "</UL></BODY></HTML>";
+    "</UL>"
+    "<BR>" @link-me("Show this page again")
+    "<BR>" @link-me("Generate another page", "")
+    "</BODY></HTML>";
 
 title:
     "Release notes for SDS/2 Steel Detailing System"
@@ -97,3 +100,7 @@ def prs():
         nums.append(random.randint(100, 8000))
     nums.sort()
     return " ".join(["(PR %d)" % i for i in nums])
+
+if not globals().has_key("link_me"):
+    def link_me(a, b=None):
+        return "<A HREF=\"#\">%s</A>" % str(a)
