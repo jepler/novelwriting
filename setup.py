@@ -68,6 +68,11 @@ setup(
     author_email="jepler@unpythonic.net",
     url="http://unpythonic.net/jeff/novelwriting/",
     packages=['novelwriting'],
+    license="GPL",
+    long_description="""
+Novelwriting randomly generates structured documents from a grammar.
+It is inspired by the Dada Engine, but is written in and extensible
+through Python.""",
     scripts=['scripts/novelwriting', 'scripts/novelwriting.cgi'],
     data_files=[(DOCDIR + "/examples", glob("examples/*.nw")),
                 (DOCDIR, ["README.html", "novelwriting/gram.g"])],

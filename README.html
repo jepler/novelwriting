@@ -21,6 +21,25 @@ or
 $ novelwriting < spam.nw
 </PRE>
 
+<H2>A simple grammar</H2>
+    
+<PRE>
+Start: folk-saying;
+folk-saying: person " once said that " folk-saying ".\n";
+person: "My " relative | "The President" | "Cardinal Fang";
+relative: "mother" | "aunt" | "grandmother" ;
+folk-saying: "a rolling stone gathers no moss"
+    | "a stitch in time saves nine"
+    | "no-one expects the Spanish Inquisition";
+;;
+</PRE>
+
+<H2>Two possible outputs from the grammar</H2>
+<PRE>
+My mother once said that no-one expects the Spanish Inquisition.
+Cardinal Fang once said that a stitch in time saves nine.
+</PRE>
+
 <H1>The grammar of .nw files</H1>
 
 <P>Outside of a token, whitespace is ignored.
@@ -112,27 +131,6 @@ defined earliest in the file otherwise.
 <PRE>
     prod: "include" Name
 </PRE>
-
-<H1>A simple grammar</H1>
-    
-<PRE>
-Start: folk-saying;
-folk-saying: person " once said that " folk-saying ".\n";
-person: "My " relative | "The President" | "Cardinal Fang";
-relative: "mother" | "aunt" | "grandmother" ;
-folk-saying: "a rolling stone gathers no moss"
-    | "a stitch in time saves nine"
-    | "no-one expects the Spanish Inquisition";
-;;
-</PRE>
-
-<H2>Two possible outputs from the grammar</H2>
-<PRE>
-My mother once said that no-one expects the Spanish Inquisition.
-Cardinal Fang once said that a stitch in time saves nine.
-</PRE>
-
-
 <H1>Using "@-calls" (increasing novelwriting's power with Python)</H1>
 
 <P>You can execute an arbitrary Python function by writing an @-call in
@@ -185,6 +183,14 @@ def alternative(rule, excluded):
     while 1:
         s = str(rule)
         if s != e: return s
+
+<H1> <tt>novelwriting.calls</tt>: predefined @-calls </H1>
+
+There's a library of predefined @-calls in the module
+'novelwriting.calls'.  Import from it in the code section of your grammar
+if you want to use them.   These are not yet documented, and may change.
+
+</PRE>
 </PRE>
 </BODY>
 </HTML>
