@@ -1,9 +1,14 @@
 <HTML>
 <HEAD>
 <TITLE> Novelwriting: random structured document generation in Python </TITLE>
-<STYLE>
+<STYLE TYPE="text/css" MEDIA="all">
 pre { margin-left: 3em; margin-right: 3em; border: solid blue 2px;
 	padding: 1ex; background-color: #c0c0ff; color: #000000; }
+table { background-color: #c0c0c0; color: #000000; border-collapse: collapse;
+    border: solid blue 2px; margin-left: 3em; margin-top: 2ex;}
+table td { border: solid blue 1px; background-color: #c0c0ff; padding: 1ex; }
+table th { border: solid blue 1px; background-color: blue; color: white; text-align: left; padding: 1ex; }
+table caption { caption-side: bottom; padding: 1ex; }
 </STYLE>
 </HEAD>
 
@@ -241,6 +246,51 @@ def alternative(rule, excluded):
 There's a library of predefined @-calls in the module
 'novelwriting.calls'.  Import from it in the code section of your grammar
 if you want to use them.   These are not yet documented, and may change.
+
+<H1> Converting a grammar from the Dada Engine to Novelwriting </H1>
+
+Many rules will work unchanged.  Rules containing only sequences, alternations,
+and repetitions should be just fine.
+
+<P> Novelwriting does not have %resource rules.  Instead, name your start
+rule "Start".
+
+<P> The Dada Engine has special syntax for some things that Novelwriting
+expresses as @-calls.  Here is a partial list:
+
+<BR>
+<TABLE>
+<CAPTION> Rules to convert from Dada Engine to Novelwriting </CAPTION>
+
+<TR>
+<TH> Dada Engine construct
+<TH> Novelwriting translation
+
+<TR>
+<TD> <TT>variable&lt;&lt;rule</TT>
+<TD> <TT>@get(variable,rule)</TT>
+
+<TR>
+<TD> <TT>$variable</TT>
+<TD> <TT>@get(variable)</TT>
+
+<TR>
+<TD> <TT>?variable=rule</TT>
+<TD> <TT>@set(variable,rule)</TT>
+
+<TR>
+<TD> <TT>variable=rule</TT>
+<TD> <TT>@set(variable,rule) @get(variable)</TT>
+
+<TR>
+<TD> <TT>?rule</TT>
+<TD> <TT>@ignore(rule)</TT>
+
+<TR>
+<TD> <TT>rule&gt;func</TT>
+<TD> <TT>@func(rule)</TT> (and write func)
+
+</TABLE>
 
 </PRE>
 </PRE>
