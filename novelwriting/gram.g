@@ -37,7 +37,8 @@ parser NovelWriting:
     rule dname: Name dname_tail -> << ".".join([Name] + dname_tail) >>
     rule dname_tail:            -> << [] >>
         | "." Name dname_tail   -> << [Name] + dname_tail >>
-    rule args: arg args_tail    -> << [arg] + args_tail >>
+    rule args:                  -> << [] >>
+        | arg args_tail         -> << [arg] + args_tail >>
     rule args_tail:             -> << [] >>
         | "," arg args_tail     -> << [arg] + args_tail >>
     rule arg: seq               -> << seq >>
