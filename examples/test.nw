@@ -1,0 +1,63 @@
+S: sayings feature-list;
+
+sayings: ("They say that " saying "\n")+;
+
+saying: "the rain in " country " falls mainly in the " 
+	@pluralize(geographic-region) "."
+	| @a-an(moving) " " object " gathers no " (substance|object) ".";
+
+feature-list: @laundry-list-init(Feature) feature-list-inner;
+feature-list-inner: @set(product-name, make-product)" is " @repeat(feature-list-one, 4, ", ") " and " feature-list-one ".  Buy " @get(product-name) " today!";
+feature-list-two: feature-list-one ", " feature-list-one;
+feature-list-four: feature-list-two ", " feature-list-two;
+make-product: "Microsoft Bob" | "FreeLSD" ;
+feature-list-one: @laundry-list(Feature, feature-list-make);
+feature-list-make: feature-prefix feature-noun | "object-oriented";
+feature-prefix: "poly" | "mono" | "gnu" | "free";
+feature-noun: "fast" | "morphic" | "ish";
+country: "Spain" | "the United States" | "Iraq";
+geographic-region: "plain" | "mountain" | "desert" ;
+object: "stone" | "cat" | "telephone";
+substance: "moss" | "snow" | "dust";
+moving: "rolling" | "gliding" | "falling" | "exploding";
+;;
+
+def a_an(x):
+    x = str(x)
+    if x[0] in "aeiou": return "an %s" % x
+    return "a %s" % x
+
+def pluralize(x):
+    x = str(x)
+    if x.endswith("y"): return x[:-1] + "ies"
+    return x+"s"
+
+llist = {}
+def laundry_list_init(ref):
+    ref = ref.parts[0]
+    llist[ref.name] = {}
+    return ""
+
+def laundry_list(ref, rule):
+    ref = ref.parts[0]
+    l = llist[ref.name]
+    for i in range(100):
+        s = str(rule)
+        if not s in l:
+            break
+    l[s] = None
+    return s
+
+vars = {}
+def set(ref, rule):
+    ref = ref.parts[0].name
+    vars[ref] = str(rule)
+    return vars[ref]
+
+def get(ref):
+    ref = ref.parts[0].name
+    return vars[ref]
+
+def repeat(rule, count, sep=""):
+    sep = str(sep)
+    return sep.join([str(rule) for i in range(count)])

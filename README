@@ -1,0 +1,78 @@
+About Novelwriting
+
+Novelwriting is a Python program for rule-based generation of text, similar
+to the Dada Engine[1].
+
+The name is chosen for the Monty Python skit, available on such recordings as
+"Monty Python The Final Rip-Off", which purports to be a live radio broadcast
+of the writing of a novel.
+
+
+Invoking novelwriting from the command-line
+
+$ novelwriting spam.nw
+or
+$ novelwriting < spam.nw
+
+
+The grammar of .nw files
+
+Outside of a token, whitespace is ignored.
+
+Comments begin with a "#" and continue until the end of the line.
+
+A "Name" begins with a letter or underline (_) and continues with zero
+or more letters, dashes (-), underlines or digits.  For instance, these
+are all names:
+	abc
+	123
+	A_B_C
+	a-b-c
+	
+A "String" starts with a double quote ("), and continues to the first
+unescaped quote.  Inside the string, a sequence composed of a backslash
+and another character has a special meaning:
+	\"	Inserts a quote inside the string
+	\\	Inserts a backslash inside the string
+	\n	Inserts a newline inside the string
+See the Python reference manual for a full explanation of the handling of
+\-escapes in a string.  For instance, these are all string:
+	"hello world"
+	"A quote: \".  A backslash: \\, A newline: \n"
+
+A "Number" starts with a nonzero digit and is followed by zero or more digits
+(including zero), or simply 0.  For instance, these are all numbers:
+	0
+	1
+	10
+	999
+
+The grammar includes other tokens.  In the rules below, the required
+sequence of characters is shown inside quotation marks.  "?" follows
+an optional item, "*" signals zero-or-more and "+" signals 1 or more of
+the preceeding item. "(" and ")" are used for grouping.
+
+	start: prods ";;"
+	prods: prod+
+The entire grammar is a series of "productions" followed by two semicolons
+and then additional Python code required by the productions.
+
+A production has a name and a list of alternatives it produces:
+	prod: Name ":" alt
+
+A list of alternatives is separated by "|".  When executing the grammar, 
+one of the alternatives is selected and sent to the output.
+	alt: seq ("|" seq)*
+
+A sequence is composed repetitions or groups:
+	seq: rep | "(" alt ")"
+	rep: atom ("*" | "+" | "?")?
+
+An atom is a Name, a String, or a call:
+	atom: Name | String | call
+
+A call is marked by "@", names the function called, and lists the arguments
+to the function:
+	Call: "@" Name "(" args ")"
+	args: arg+
+	arg: seq | Number
