@@ -1,0 +1,132 @@
+Start:
+    @discard(
+        @set(release-version, @make-version-before(99))
+        @set(release-grade, make-grade)
+        )
+    html-header
+    @repeat(relnote-item, 20, 100)
+    html-footer;
+
+html-header:
+    "<html><head><title>" title "</title></head>"
+    "<body bgcolor=#ffffff text=#000000>"
+    "<center>"
+    "<H1>" title "</H1>"
+    "</center>"
+    "<UL>";
+
+html-footer:
+    "</UL></BODY></HTML>";
+
+title:
+    "Release notes for SDS/2 Steel Detailing System"
+    " version 6.3" @get(release-version) " " @get(release-grade);
+
+pr-number: "(PR " @randint(100, 7000) ")";
+prs: @prs();
+prs-unused: pr-number (" " pr-number)*;
+
+relnote-item: "<LI>" relnote-expl ".  " prs "<P>";
+
+opt-situation: ""
+    | " when " @set(this-task, common-task)
+      ( (" and " | " or ") @alternative(common-task, @get(this-task))) ?
+    | " in " program-component;
+
+relnote-expl: relnote-with-situation opt-situation | relnote-wo-situation;
+
+relnote-with-situation:
+    "We have fixed a problem " ("in " program-component " ")?
+      "which resulted in " undesirable-behavior
+  | @cap-first(feature-pair) " will now " desirable-behavior;
+
+relnote-wo-situation:
+    @cap-first(type-of-data) " in " @set(this-component, program-component)
+    " will now match " @alternative(program-component, @get(this-component)) |
+    relnote-with-situation;
+
+common-task: "regenerating details" | "rotating material" | "creating solids"
+  | "plotting details" | "loading assemblies";
+
+program-component: "EAD" | "CAD" | "Framing" | "plot" | "DXF export" 
+  | "detailing" | "design" ;
+
+desirable-behavior: "not crash" | "give a warning" | "be reflected on details" |
+    "give an error" | "comply with LRFD" |
+    "force the connection to become graphical";
+
+undesirable-behavior: "a Signal 11" | 
+    "the connection becoming graphical" | "a warning dialog" | 
+    "an error dialog" | "silent failure";
+
+type-of-data: "hole size" | "material thickness" | "setup data";
+
+f-s: "field " | "shop " | "";
+feature: plain-feature | "parametric " plain-feature;
+plain-feature: "holes" | f-s ("welds" | ("tension-control "? "bolts")) | 
+    "clip angles" | "wide flanges" | "beams" | "braces" | "joists" |
+    "members" | "materials";
+
+opt-parametric: "parametric " | "";
+
+member-subfeature: mtrl-subfeature | material-type | "piecemarks";
+mtrl-subfeature: f-s ("welds" | ("tension control "? "bolts")) | "holes"
+  | "piecemarks" | "hole diameter" | "bolt length" | "slot length";
+material-type: "wide flanges" | "clip angles" | "plates" | "material";
+member-type: "beams" | "columns" | "braces" | "joists" | "members";
+feature-pair:
+    member-subfeature " on " opt-parametric member-type
+  | mtrl-subfeature " on " opt-parametric material-type;
+
+make-grade: "Release" | "Beta" | "Beta" | "Alpha";
+
+;;
+import random
+
+def make_version_before(num):
+    if not isinstance(num, int):
+        num = int(str(num))
+    return "%02d" % random.randint(0, num-1)
+
+def discard(arg):
+    str(arg)
+    return ""
+
+d = {}
+def set(name, val):
+    name = name.parts[0].name
+    d[name] = str(val)
+    return d[name]
+
+def get(name):
+    name = name.parts[0].name
+    return d[name]
+
+def alternative(rule, excluded):
+    e = str(excluded)
+    while 1:
+        s = str(rule)
+        if s != e: return s
+
+def cap_first(rule):
+    rule = str(rule)
+    return rule[:1].upper() + rule[1:]
+
+def repeat(rule, min, max):
+    ret = []
+    for i in range(0, random.randint(min, max)):
+        ret.append(str(rule))
+    return "".join(ret)
+
+def randint(min, max):
+    min = int(str(min))
+    max = int(str(max))
+    return str(random.randint(min, max))
+
+def prs():
+    count = random.randint(1, 2) + random.randint(0, 2)
+    nums = []
+    for i in range(count):
+        nums.append(random.randint(100, 8000))
+    nums.sort()
+    return " ".join(["(PR %d)" % i for i in nums])

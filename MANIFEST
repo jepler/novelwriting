@@ -1,12 +1,15 @@
 setup.py
 scripts/novelwriting
+novelwriting/gram.g
 novelwriting/driver.py
 novelwriting/gram.py
 novelwriting/main.py
 novelwriting/yapps.py
+novelwriting/__init__.py
 examples/buy.nw
 examples/nw.nw
 examples/simple.nw
 examples/test.nw
+examples/release.nw
 README
 README.html
