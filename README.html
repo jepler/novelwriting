@@ -100,7 +100,7 @@ one of the alternatives is selected and sent to the output.
 to the function:
 <PRE>
     call: "@" dotted-name "(" args ")";
-    args: arg ("," arg)*;
+    args: arg ("," arg)* | NOTHING ;
     arg: seq | Number;
     dotted-name: Name ("." Name)*;
 </PRE>

@@ -24,6 +24,7 @@
    A "Name" begins with a letter or underline (_) and continues with zero or
    more letters, dashes (-), underlines or digits. For instance, these are
    all names:
+
      * abc
      * _123
      * A_B_C
@@ -32,18 +33,21 @@
    A "String" starts with a double quote ("), and continues to the first
    unescaped quote. Inside the string, a sequence composed of a backslash and
    another character has a special meaning:
+
      * \" Inserts a quote inside the string
      * \\ Inserts a backslash inside the string
      * \n Inserts a newline inside the string
 
    See the Python reference manual for a full explanation of the handling of
    \-escapes in a string. For instance, these are all strings:
+
      * "hello world"
      * "A quote: \". A backslash: \\, A newline: \n"
 
    A "Number" (integer) starts with an optional "-" to signify negation, a
    nonzero digit and is followed by zero or more digits (including zero), or
    simply 0. For instance, these are all numbers:
+
      * 0
      * 1
      * -10
@@ -83,7 +87,7 @@
    arguments to the function:
 
      call: "@" dotted-name "(" args ")";
-     args: arg ("," arg)*;
+     args: arg ("," arg)* | NOTHING ;
      arg: seq | Number;
      dotted-name: Name ("." Name)*;
 
