@@ -4,5 +4,5 @@ include examples/*.nw
 include novelwriting/*.py
 include novelwriting/gram.g
 exclude novelwriting/gram.py
-include scripts/novelwriting
+include scripts/*
 include setup.py

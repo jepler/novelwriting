@@ -108,6 +108,10 @@ to the function:
 <P>Production starts with a rule called "Start" (if there is one), or the rule
 defined earliest in the file otherwise.
 
+<P>Anywhere a production is premitted, a file can be included:
+<PRE>
+    prod: "include" Name
+</PRE>
 
 <H1>A simple grammar</H1>
     

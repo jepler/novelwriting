@@ -94,6 +94,10 @@
    Production starts with a rule called "Start" (if there is one), or the
    rule defined earliest in the file otherwise.
 
+   Anywhere a production is premitted, a file can be included:
+
+     prod: "include" Name
+
                                 A simple grammar
 
  Start: folk-saying;
