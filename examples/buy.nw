@@ -1,0 +1,25 @@
+Start: @set(this-product, product-name) " is great.  "
+    "It's better than " @alternative(product-name, @get(this-product)) ".\n"
+    "Buy " @get(this-product) " today!";
+
+product-name: product-adj product-noun;
+product-adj: "ultra" | "mega" | "dyna";
+product-noun: "spam" | "parrot" | "python";
+;;
+
+d = {}
+def set(name, val):
+    name = name.parts[0].name
+    d[name] = str(val)
+    return d[name]
+
+def get(name):
+    name = name.parts[0].name
+    return d[name]
+
+def alternative(rule, excluded):
+    e = str(excluded)
+    while 1:
+        s = str(rule)
+        if s != e: return s
+

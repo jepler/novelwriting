@@ -1,0 +1,37 @@
+Start: prods ";" ";" python-code;
+prods: prod +;
+prod: Name ":" alt ";\n";
+alt: seq ("|" seq)*;
+seq: rep | rep | rep | rep | rep | "(" alt ")";
+rep: atom ("*" | "|" | "?")?;
+atom: Name | String | call;
+call: "@" dotted-name "(" args ")";
+args: arg+;
+arg: seq | Number;
+dotted-name: Name ("." Name)*;
+
+python-code: "";
+
+Name: @name(0);
+Number: @number(0);
+String: @string(0);
+
+;;
+import string, random
+
+sname = string.lowercase + string.uppercase + "_"
+mname = sname + "-" + string.digits
+chars = string.printable
+
+def name(dummy):
+    r = random.choice(sname)
+    while random.random() < .8:
+        r = r + random.choice(mname)
+    return r
+def number(dummy):
+    return str(random.randrange(-100, 100))
+def string(dummy):
+    r = ""
+    for i in range(random.randrange(5, 20)):
+        r = r + random.choice(chars)
+    return '"' + repr("'\0" + r)[3:]

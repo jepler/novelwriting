@@ -1,0 +1,7 @@
+Start: person " once said that " folk-saying ".\n";
+person: "My " relative | "The President" | "Cardinal Fang";
+relative: "Mother" | "Aunt" | "Grandmother" ;
+folk-saying: "a rolling stone gathers no moss"
+    | "a stitch in time saves nine"
+    | "no-one expects the Spanish Inquisition";
+;;
