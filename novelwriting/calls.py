@@ -1,4 +1,4 @@
-import random
+import random, novelwriting.driver
 
 d = {}
 def set(name, val):
@@ -59,4 +59,8 @@ def laundry_list(ref, rule):
     l[s] = None
     return s
 
+def expand(s):
+        s = str(s)
+        r = novelwriting.driver.rules[s]
+        return str(r)
 

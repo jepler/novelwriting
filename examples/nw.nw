@@ -1,14 +1,14 @@
 Start: prods ";" ";" python-code;
 prods: prod +;
 prod: Name ":" alt ";\n";
-alt: seq ("|" seq)*;
+alt: seq ["|" seq]*;
 seq: rep | rep | rep | rep | rep | "(" alt ")";
-rep: atom ("*" | "|" | "?")?;
+rep: atom ["*" | "|" | "?"]?;
 atom: Name | String | call;
 call: "@" dotted-name "(" args ")";
 args: arg+;
 arg: seq | Number;
-dotted-name: Name ("." Name)*;
+dotted-name: Name ["." Name]*;
 
 python-code: "";
 

@@ -29,36 +29,8 @@ class build_py_yapps(build_py):
         else:
             return build_py.build_module(self, module, module_file, package)
 
-#    def get_outputs(self):
-#        exts = self.extensions[:]
-#        outputs = []
-#        for e in exts:
-#            if not self.is_yapps(e): continue
-#            ofn = os.path.join(self.build_lib,
-#                    "/".join(e.name.split(".")) + ".py")
-#            outputs.append(ofn)
-#            outputs.append(ofn + "c") 
-#        outputs = outputs + build_ext.get_outputs(self)
-#        print "ext outputs", outputs
-#        self.extensions = exts
-#
-#    def build_extensions(self):
-#        exts = self.extensions[:]
-#        for e in exts:
-#            if not self.is_yapps(e): continue
-#            self.extensions.remove(e)
-#            ifn = e.sources[0]
-#            ofn = os.path.join(self.build_lib,
-#                    "/".join(e.name.split(".")) + ".py")
-#            novelwriting.yapps.generate(ifn, ofn)
-#        build_ext.build_extensions(self)
-#        self.extensions = exts
-#
-#    def is_yapps(self, e):
-#        return len(e.sources) == 1 and e.sources[0].endswith(".g")
-
 name="Novelwriting"
-version="0.3"
+version="0.4"
 DOCDIR="/usr/share/doc/%s-%s" % (name, version)
 setup(
     name=name,

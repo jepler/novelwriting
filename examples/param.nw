@@ -1,0 +1,12 @@
+Start:  sentence-about(animal) ;
+
+animal: "dog" | "cat" ;
+
+sentence-about(subject): @expand(subject) " is a " subject ;
+
+dog: "Fido" | "Spot" ;
+
+cat: "Tiddles" | "Fluffy" ;
+
+;;
+from novelwriting.calls import expand

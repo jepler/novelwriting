@@ -1,5 +1,11 @@
 import random, bisect
 
+try:
+    enumerate
+except:
+    def enumerate(l):
+        return zip(range(len(l)), l)
+
 def weight(l):
     c = 0
     r = []
@@ -52,19 +58,37 @@ class Sequence(Concatable):
 rules = {}
 _anon_ruleno = 0
 class Reference(Concatable):
-    def __init__(self, name=None):
+    def __init__(self, name=None, args=[]):
         global _anon_ruleno
         if name is None:
             name = _anon_ruleno
             _anon_ruleno += 1
         self.name = name
+        self.args = args
     def __str__(self):
-        return str(rules[self.name])
+        global rules
+        rule = rules[self.name]
+        if not isinstance(rule, Rule):
+            if self.args:
+                raise TypeError, "Rule %s takes no arguments (%s given)" % (
+                    self.name, len(self.args))
+            return str(rule)
+        if len(self.args) != len(rule.args):
+            raise TypeError, "Rule %s takes %s argument%s (%s given)" % (
+                rule.name, len(rule.args),
+                ["", "s"][len(rule.args) != 1], len(self.args))
+        old_rules = rules.copy()
+        for i, name in enumerate(rule.args):
+            rules[name] = str(self.args[i])
+        ret = str(rules[self.name])
+        rules = old_rules
+        return ret
 
 class Rule(Concatable):
-    def __init__(self, name, body):
+    def __init__(self, name, body, args=[]):
         self.name = name
         self.body = body
+        self.args = args
         rules[name] = self
 
     def __str__(self):

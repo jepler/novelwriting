@@ -1,4 +1,11 @@
 <HTML>
+<HEAD>
+<TITLE> Novelwriting: random structured document generation in Python </TITLE>
+<STYLE>
+pre { margin-left: 3em; margin-right: 3em; border: solid blue 2px;
+	background-color: #c0c0ff; color: #000000; }
+</STYLE>
+</HEAD>
 
 <BODY>
 <H1>About Novelwriting</H1>
@@ -18,7 +25,7 @@ $ novelwriting spam.nw
 </PRE>
 or
 <PRE>
-$ novelwriting < spam.nw
+$ novelwriting &lt; spam.nw
 </PRE>
 
 <H2>A simple grammar</H2>
@@ -50,87 +57,127 @@ Cardinal Fang once said that a stitch in time saves nine.
 or more letters, dashes (-), underlines or digits.  For instance, these
 are all names:
 <UL>
-    <LI>abc
-    <LI>_123
-    <LI>A_B_C
-    <LI>a-b-c
+    <LI><TT>abc</TT>
+    <LI><TT>_123</TT>
+    <LI><TT>A_B_C</TT>
+    <LI><TT>a-b-c</TT>
 </UL>
 
 <P>A "String" starts with a double quote ("), and continues to the first
 unescaped quote.  Inside the string, a sequence composed of a backslash
 and another character has a special meaning:
 <UL>
-    <LI>\"	Inserts a quote inside the string
-    <LI>\\	Inserts a backslash inside the string
-    <LI>\n	Inserts a newline inside the string
+    <LI><TT>\"</TT>	Inserts a quote inside the string
+    <LI><TT>\\</TT>	Inserts a backslash inside the string
+    <LI><TT>\n</TT>	Inserts a newline inside the string
 </UL>
 <P>See the Python reference manual for a full explanation of the handling of
 \-escapes in a string.  For instance, these are all strings:
 <UL>
-    <LI>"hello world"
-    <LI>"A quote: \".  A backslash: \\, A newline: \n"
+    <LI><TT>"hello world"</TT>
+    <LI><TT>"A quote: \".  A backslash: \\, A newline: \n"</TT>
 </UL>
 
 <P>A "Number" (integer) starts with an optional "-" to signify negation,
 a nonzero digit and is followed by zero or more digits (including zero),
 or simply 0.  For instance, these are all numbers:
 <UL>
-    <LI>0
-    <LI>1
-    <LI>-10
-    <LI>999
+    <LI><TT>0</TT>
+    <LI><TT>1</TT>
+    <LI><TT>-10</TT>
+    <LI><TT>999</TT>
 </UL>
 
 <P>The grammar includes other tokens.  In the rules below, the required
 sequence of characters is shown inside quotation marks.  "?" follows
 an optional item, "*" signals zero-or-more and "+" signals 1 or more of
-the preceeding item. "(" and ")" are used for grouping.
+the preceeding item. "[" and "]" are used for grouping.
 <PRE>
-    start: prods ";;" python-code;
-    prods: prod+;
+start: rules ";;" python-code;
+rules: rule+;
 </PRE>
-<P>The entire grammar is a series of "productions" followed by two semicolons
-and then additional Python code required by the productions.  "python-code"
+<P>The entire grammar is a series of "rules" followed by two semicolons
+and then additional Python code required by the rules.  "python-code"
 is any sequence of characters up to the end of the file.
 
-<P>A production has a name and a list of alternatives it produces:
+<P>A rules has a name, an optional parameter list, and a list of
+alternatives it produces.  A rules that takes parameters is called a
+"parameterized rule".
 <PRE>
-    prod: Name ":" alt ";";
+rule: Name opt-params ":" alt ";";
+opt-params: NOTHING | "(" Name [ "," Name ]* ")";
 </PRE>
 
 <P>A list of alternatives is separated by "|".  When executing the grammar, 
 one of the alternatives is selected and sent to the output.
 <PRE>
-    alt: seq ("|" seq)*;
+alt: seq ["|" seq]*;
 </PRE>
 
 <P>A sequence is composed repetitions or groups:
 <PRE>
-    seq: rep | "(" alt ")";
-    rep: atom ("*" | "+" | "?")?;
+seq: rep | "[" alt "]";
+rep: atom ["*" | "+" | "?"]?;
 </PRE>
 
-<P>An atom is a Name, a String, or a call:
+<P>An atom is a Name with optional arguments, a String, or a call:
 <PRE>
-    atom: Name | String | call;
+atom: Name opt-args | String | call;
+opt-args: NOTHING | "(" seq [ "," seq ]* ")";
 </PRE>
 
 <P>A call is marked by "@", names the function called, and lists the arguments
 to the function:
 <PRE>
-    call: "@" dotted-name "(" args ")";
-    args: arg ("," arg)* | NOTHING ;
-    arg: seq | Number;
-    dotted-name: Name ("." Name)*;
+call: "@" dotted-name "(" args ")";
+args: arg ["," arg]* | NOTHING ;
+arg: seq | Number;
+dotted-name: Name ["." Name]*;
 </PRE>
 
 <P>Production starts with a rule called "Start" (if there is one), or the rule
 defined earliest in the file otherwise.
 
-<P>Anywhere a production is premitted, a file can be included:
+<P>Anywhere a rule is premitted, a file can be included:
 <PRE>
-    prod: "include" Name
+rule: "include" Name;
 </PRE>
+The included file can define rules, and must end with ";;".  No code portion is permitted.
+
+<H1>Using parametric rules</H1>
+<P> The simplest use of a parametric rule is to produce identical text in multiple places.  For instance,
+<PRE>
+Start: sentence-about(food-name);
+food-name: "tofu" | "spam";
+sentence-about(food): food " is a tasty treat.  Eat some " food " today.\n";
+;;
+</PRE>
+The sequence of operations is as follows: each argument is expanded in
+turn, and a temporary rule with the name of the corresponding parameter
+is created.  Then, the parametric rule is expanded.  Finally, the
+temporary rules are removed, and any existing with the same name is
+restored.  As a result, any rule called from sentence-about will see the same
+expansion of "food" as sentence-about did.  That's why the following grammar works:
+<PRE>
+Start: sentence-about(food-name);
+food-name: "tofu" | "spam";
+sentence-about(food): positive-sentence | negative-sentence;
+positive-sentence: food " is a tasty treat.  Eat some " food " today.\n";
+negative-sentence: food " is nasty-tasting.  I can't stand " food ".\n";
+;;
+</PRE>
+
+<P>Using a predefined @-call, @expand, you can expand the rule with the given name.  An example:
+<PRE>
+Start:  sentence-about(animal) ;
+animal: "dog" | "cat" ;
+sentence-about(subject): @expand(subject) " is a " subject ;
+dog: "Fido" | "Spot" ;
+cat: "Tiddles" | "Fluffy" ;
+;;
+from novelwriting.calls import expand
+</PRE>
+
 <H1>Using "@-calls" (increasing novelwriting's power with Python)</H1>
 
 <P>You can execute an arbitrary Python function by writing an @-call in
@@ -183,6 +230,7 @@ def alternative(rule, excluded):
     while 1:
         s = str(rule)
         if s != e: return s
+</PRE>
 
 <H1> <tt>novelwriting.calls</tt>: predefined @-calls </H1>
 

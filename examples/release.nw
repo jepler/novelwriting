@@ -33,13 +33,13 @@ relnote-item: "<LI>" relnote-expl ".  " prs "<P>";
 
 opt-situation: ""
     | " when " @set(this-task, common-task)
-      ( (" and " | " or ") @alternative(common-task, @get(this-task))) ?
+      [ [" and " | " or "] @alternative(common-task, @get(this-task))] ?
     | " in " program-component;
 
 relnote-expl: relnote-with-situation opt-situation | relnote-wo-situation;
 
 relnote-with-situation:
-    "We have fixed a problem " ("in " program-component " ")?
+    "We have fixed a problem " ["in " program-component " "]?
       "which resulted in " undesirable-behavior
   | @cap-first(feature-pair) " will now " desirable-behavior;
 
@@ -66,14 +66,14 @@ type-of-data: "hole size" | "material thickness" | "setup data";
 
 f-s: "field " | "shop " | "";
 feature: plain-feature | "parametric " plain-feature;
-plain-feature: "holes" | f-s ("welds" | ("tension-control "? "bolts")) | 
+plain-feature: "holes" | f-s ["welds" | ["tension-control "? "bolts"]] | 
     "clip angles" | "wide flanges" | "beams" | "braces" | "joists" |
     "members" | "materials";
 
 opt-parametric: "parametric " | "";
 
 member-subfeature: mtrl-subfeature | material-type | "piecemarks";
-mtrl-subfeature: f-s ("welds" | ("tension control "? "bolts")) | "holes"
+mtrl-subfeature: f-s ["welds" | ["tension control "? "bolts"]] | "holes"
   | "piecemarks" | "hole diameter" | "bolt length" | "slot length";
 material-type: "wide flanges" | "clip angles" | "plates" | "material";
 member-type: "beams" | "columns" | "braces" | "joists" | "members";

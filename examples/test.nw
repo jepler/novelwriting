@@ -1,6 +1,6 @@
 S: sayings feature-list;
 
-sayings: ("They say that " saying "\n")+;
+sayings: ["They say that " saying "\n"]+;
 
 saying: "the rain in " country " falls mainly in the " 
 	@pluralize(geographic-region) "."

@@ -1,0 +1,9 @@
+Start: B a b c(b) a;
+
+a: "A";
+b: "B";
+c(a): a @expand(a) a;
+B: "big";
+
+;;
+from novelwriting.calls import expand

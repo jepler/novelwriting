@@ -15,6 +15,22 @@
 
  $ novelwriting < spam.nw
 
+A simple grammar
+
+ Start: folk-saying;
+ folk-saying: person " once said that " folk-saying ".\n";
+ person: "My " relative | "The President" | "Cardinal Fang";
+ relative: "mother" | "aunt" | "grandmother" ;
+ folk-saying: "a rolling stone gathers no moss"
+     | "a stitch in time saves nine"
+     | "no-one expects the Spanish Inquisition";
+ ;;
+
+Two possible outputs from the grammar
+
+ My mother once said that no-one expects the Spanish Inquisition.
+ Cardinal Fang once said that a stitch in time saves nine.
+
                             The grammar of .nw files
 
    Outside of a token, whitespace is ignored.
@@ -56,63 +72,89 @@
    The grammar includes other tokens. In the rules below, the required
    sequence of characters is shown inside quotation marks. "?" follows an
    optional item, "*" signals zero-or-more and "+" signals 1 or more of the
-   preceeding item. "(" and ")" are used for grouping.
+   preceeding item. "[" and "]" are used for grouping.
 
-     start: prods ";;" python-code;
-     prods: prod+;
+ start: rules ";;" python-code;
+ rules: rule+;
 
-   The entire grammar is a series of "productions" followed by two semicolons
-   and then additional Python code required by the productions. "python-code"
-   is any sequence of characters up to the end of the file.
+   The entire grammar is a series of "rules" followed by two semicolons and
+   then additional Python code required by the rules. "python-code" is any
+   sequence of characters up to the end of the file.
 
-   A production has a name and a list of alternatives it produces:
+   A rules has a name, an optional parameter list, and a list of alternatives
+   it produces. A rules that takes parameters is called a "parameterized
+   rule".
 
-     prod: Name ":" alt ";";
+ rule: Name opt-params ":" alt ";";
+ opt-params: NOTHING | "(" Name [ "," Name ]* ")";
 
    A list of alternatives is separated by "|". When executing the grammar,
    one of the alternatives is selected and sent to the output.
 
-     alt: seq ("|" seq)*;
+ alt: seq ["|" seq]*;
 
    A sequence is composed repetitions or groups:
 
-     seq: rep | "(" alt ")";
-     rep: atom ("*" | "+" | "?")?;
+ seq: rep | "[" alt "]";
+ rep: atom ["*" | "+" | "?"]?;
 
-   An atom is a Name, a String, or a call:
+   An atom is a Name with optional arguments, a String, or a call:
 
-     atom: Name | String | call;
+ atom: Name opt-args | String | call;
+ opt-args: NOTHING | "(" seq [ "," seq ]* ")";
 
    A call is marked by "@", names the function called, and lists the
    arguments to the function:
 
-     call: "@" dotted-name "(" args ")";
-     args: arg ("," arg)* | NOTHING ;
-     arg: seq | Number;
-     dotted-name: Name ("." Name)*;
+ call: "@" dotted-name "(" args ")";
+ args: arg ["," arg]* | NOTHING ;
+ arg: seq | Number;
+ dotted-name: Name ["." Name]*;
 
    Production starts with a rule called "Start" (if there is one), or the
    rule defined earliest in the file otherwise.
 
-   Anywhere a production is premitted, a file can be included:
+   Anywhere a rule is premitted, a file can be included:
 
-     prod: "include" Name
+ rule: "include" Name;
 
-                                A simple grammar
+   The included file can define rules, and must end with ";;". No code
+   portion is permitted.
 
- Start: folk-saying;
- folk-saying: person " once said that " folk-saying ".\n";
- person: "My " relative | "The President" | "Cardinal Fang";
- relative: "mother" | "aunt" | "grandmother" ;
- folk-saying: "a rolling stone gathers no moss"
-     | "a stitch in time saves nine"
-     | "no-one expects the Spanish Inquisition";
+                             Using parametric rules
+
+   The simplest use of a parametric rule is to produce identical text in
+   multiple places. For instance,
+
+ Start: sentence-about(food-name);
+ food-name: "tofu" | "spam";
+ sentence-about(food): food " is a tasty treat.  Eat some " food " today.\n";
  ;;
 
-Two possible outputs from the grammar
+   The sequence of operations is as follows: each argument is expanded in
+   turn, and a temporary rule with the name of the corresponding parameter is
+   created. Then, the parametric rule is expanded. Finally, the temporary
+   rules are removed, and any existing with the same name is restored. As a
+   result, any rule called from sentence-about will see the same expansion of
+   "food" as sentence-about did. That's why the following grammar works:
 
- My mother once said that no-one expects the Spanish Inquisition.
- Cardinal Fang once said that a stitch in time saves nine.
+ Start: sentence-about(food-name);
+ food-name: "tofu" | "spam";
+ sentence-about(food): positive-sentence | negative-sentence;
+ positive-sentence: food " is a tasty treat.  Eat some " food " today.\n";
+ negative-sentence: food " is nasty-tasting.  I can't stand " food ".\n";
+ ;;
+
+   Using a predefined @-call, @expand, you can expand the rule with the given
+   name. An example:
+
+ Start:  sentence-about(animal) ;
+ animal: "dog" | "cat" ;
+ sentence-about(subject): @expand(subject) " is a " subject ;
+ dog: "Fido" | "Spot" ;
+ cat: "Tiddles" | "Fluffy" ;
+ ;;
+ from novelwriting.calls import expand
 
          Using "@-calls" (increasing novelwriting's power with Python)
 
@@ -165,3 +207,9 @@ Two possible outputs from the grammar
      while 1:
          s = str(rule)
          if s != e: return s
+
+                     novelwriting.calls: predefined @-calls
+
+   There's a library of predefined @-calls in the module
+   'novelwriting.calls'. Import from it in the code section of your grammar
+   if you want to use them. These are not yet documented, and may change.
