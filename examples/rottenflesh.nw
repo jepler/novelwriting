@@ -1,16 +1,10 @@
-#include <stdmap.pbi>
-#include <format.pbi>
-
-#ifndef SEED
-#define SEED 0
-#endif
-
 Start: S;
 
 fm-header:
 "<HTML>"
 "<HEAD>"
-"<title>rottenflesh.net: Crap announced " @today() "</title>"
+"<link rel=\"stylesheet\" href=\"font-awesome.min.css\">"
+"<title>rottenflesh.net: Crap announced " @today "</title>"
 "<style type=\"text/css\">"
 "<!--"
 "BODY { margin: 0; padding: 0; }"
@@ -49,13 +43,13 @@ hr: "<hr align=center size=1 noshade width=100%>";
 
 S: @laundry-list-init(Progname) fm-header
 "<table><tr>"
-    "<td valign=top width=90%>" @ten-releases()
+    "<td valign=top width=90%>" @ten-releases
     "<td valign=top style=\"background-color: #c0c0c0\" width=10%>" fm-sidebar
 "</table>" fm-footer;
 
 release: make-progname make-version make-cloneof
     "\n\n\n"
-    "<table> <tr> <td><img src=http://images.freshmeat.net/button.gif>"
+    "<table> <tr> <td><i class=\"fa fa-file\">"
     "<td valign=top>"title byline
     "</table>"
     "\n" about changes info"\n\n";
@@ -64,7 +58,7 @@ title:
     "<font size=+1 color=#000000><a href=#>" progname " " version opt-branch "</a></font>\n" ;
 
 make-progname: @ignore(@set(v-progname,new-progname));
-make-version: @make-version();
+make-version: @make-version;
 make-cloneof: @ignore(@set(v-clone,obscure-technology));
 clone-prog-name: new-progname | coreunix-program;
 
@@ -212,7 +206,7 @@ info-focus: "Brown paper bag bug" | "Name change due to trademark lawsuit" | "Fi
 info-license: "Pants" | "GNU General Public License" | "Bend-Over EULA" | "BSD" | "crapware" | "long and complicated" | "ambiguous" | "infringing";
 
 info-icons:
-["<a href=#><img src=\"http://images.freshmeat.net/url_homepage.gif\" width=\"16\" height=\"16\" alt=\"Homepage\" title=\"Homepage\" border=\"0\"></a>"|""]
+["<a href=#><i class=\"fa fa-home\"></a>"|""]
 
 ["      <a href=#><img src=\"http://images.freshmeat.net/url_tgz.gif\" width=\"16\" height=\"16\" alt=\"Tar/GZ\" title=\"Tar/GZ\" border=\"0\"></a>"|""]
 ["      <a href=#><img src=\"http://images.freshmeat.net/url_changelog.gif\" width=\"16\" height=\"16\" alt=\"Changelog\" title=\"Changelog\" border=\"0\"></a>"|""]

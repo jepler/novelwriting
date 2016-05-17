@@ -1,6 +1,5 @@
 from distutils.core import setup, Extension
 from distutils.command.build_py import build_py
-import novelwriting.yapps
 import os, string
 from glob import glob
 from types import StringType, ListType, TupleType
@@ -24,8 +23,8 @@ class build_py_yapps(build_py):
         
         if module_file.endswith(".g"):
             outfile = self.get_module_outfile(self.build_lib, package, module)
-            novelwriting.yapps.generate(module_file, outfile)
             self.announce("building %s -> %s" % (module_file, outfile))
+            os.spawnvp(os.P_WAIT, 'yapps', ['yapps', module_file, outfile])
         else:
             return build_py.build_module(self, module, module_file, package)
 
