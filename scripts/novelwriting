@@ -6,7 +6,6 @@
 
 import sys
 import novelwriting.gram as gram
-import novelwriting.tb
 
 if len(sys.argv) == 1:
     f = sys.stdin
@@ -21,7 +20,7 @@ parts = prog.split("\n;;\n")
 if len(parts) > 1:
     code = "\n" * parts[0].count("\n") + parts[1]
     code = compile(code, fn, "exec")
-    exec(code)
+    exec(code)  #  pylint: disable=exec-used
 gram.parse("start", parts[0] + "\n;;\n")
 
 f.close()

@@ -2,12 +2,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import random, novelwriting.driver
+import random
+import novelwriting.driver
 
 d = {}
 
 
-def set(name, val):
+def set(name, val):  #  pylint: disable=redefined-builtin
     name = name.name
     d[name] = str(val)
     return d[name]
@@ -22,10 +23,11 @@ def get(name, default=None):
 
 def alternative(rule, excluded):
     e = str(excluded)
-    for i in range(100):
+    for _ in range(100):
         s = str(rule)
         if s != e:
-            return s
+            break
+    return s
 
 
 def discard(arg):
@@ -40,12 +42,12 @@ def cap_first(rule):
 
 def repeat(rule, count, sep=""):
     ret = []
-    for i in range(count):
+    for _ in range(count):
         ret.append(str(rule))
     return str(sep).join(ret)
 
 
-def random_repeat(rule, min, max, sep=""):
+def random_repeat(rule, min, max, sep=""):  # pylint: disable=redefined-builtin
     return repeat(rule, random.randint(min, max), sep)
 
 
@@ -75,7 +77,7 @@ def laundry_list_init(ref):
 def laundry_list(ref, rule):
     ref = ref.parts[0]
     l = llist[ref.name]
-    for i in range(100):
+    for _ in range(100):
         s = str(rule)
         if not s in l:
             break
@@ -103,8 +105,7 @@ def if_eq(a, b, if_true, if_false):
     b = str(b)
     if a == b:
         return str(if_true)
-    else:
-        return str(if_false)
+    return str(if_false)
 
 
 def expand(s):

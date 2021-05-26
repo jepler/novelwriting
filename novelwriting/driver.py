@@ -2,14 +2,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import random, bisect
+"""Low-level implementation details of novelwriting"""
 
-try:
-    enumerate
-except:
-
-    def enumerate(l):
-        return zip(range(len(l)), l)
+import random
 
 
 def weight(l):
@@ -40,8 +35,8 @@ class Concatable:
 
 
 class Alternatives(Concatable):
-    def __init__(self, *alternatives):
-        self.alternatives, self.weight = weight(alternatives)
+    def __init__(self, *alts):
+        self.alternatives, self.weight = weight(alts)
 
     def addrule(self, a, b=None):
         if b is None:
@@ -56,11 +51,13 @@ class Alternatives(Concatable):
         for i, j in self.alternatives:
             if r < i:
                 return str(j)
+        raise RuntimeError("unreachable")
 
     def __repr__(self):
         return "<Alternatives %s>" % map(short, self.alternatives)
 
-    def __short__(self):
+    @staticmethod
+    def __short__():
         return "<Alternatives>"
 
 
@@ -86,7 +83,8 @@ class Sequence(Concatable):
     def __repr__(self):
         return "<Sequence %s>" % map(short, self.parts)
 
-    def __short__(self):
+    @staticmethod
+    def __short__():
         return "<Sequence>"
 
 
@@ -101,8 +99,10 @@ _anon_ruleno = 0
 
 
 class Reference(Concatable):
-    def __init__(self, name=None, args=[]):
-        global _anon_ruleno
+    def __init__(self, name=None, args=None):
+        if args is None:
+            args = []
+        global _anon_ruleno  # pylint: disable=global-statement
         if name is None:
             name = _anon_ruleno
             _anon_ruleno += 1
@@ -110,7 +110,7 @@ class Reference(Concatable):
         self.args = args
 
     def __str__(self):
-        global rules
+        global rules  # pylint: disable=global-statement
         rule = rules[self.name]
         if not isinstance(rule, Rule):
             if self.args:
@@ -141,10 +141,13 @@ class Reference(Concatable):
 
 
 class Rule(Concatable):
-    def __init__(self, name, body, args=[]):
+    def __init__(self, name, body, args=None):
         self.name = name
         self.body = body
-        self.args = args
+        if args is None:
+            self.args = []
+        else:
+            self.args = args
         rules[name] = self
 
     def __str__(self):
@@ -169,7 +172,7 @@ class Call(Concatable):
         self.args = args
 
     def __str__(self):
-        fun = eval(self.fun_name, __import__("__main__").__dict__)
+        fun = getattr(__import__("__main__"), self.fun_name)
         ret = fun(*self.args)
         if ret is None:
             return ""
@@ -189,6 +192,10 @@ class Pluralize(Concatable):
     def __str__(self):
         return str(self.rule) + "s"
 
+    @staticmethod
+    def __short__():
+        return "<Pluralize>"
+
 
 def short(x):
     if hasattr(x, "__short__"):
@@ -196,7 +203,7 @@ def short(x):
     return repr(x)
 
 
-if __name__ == "__main__":
+def main():
     C = Rule("C", Alternatives("a", "b", (0.5, "c")))
     D = Rule("D", Alternatives(C, "xx"))
     E = Rule("E", Alternatives(D, (2, Reference("E") + D)))
@@ -208,10 +215,14 @@ if __name__ == "__main__":
     S = Rule("S", (E | F) + "$")
     print(rules)
 
-    for i in range(10):
+    for _ in range(10):
         print(S)
 
-    for i in range(10):
+    for _ in range(10):
         print(Joke)
+
+
+if __name__ == "__main__":
+    main()
 
 # vim:sw=4:sts=4:et:

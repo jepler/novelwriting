@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from distutils.core import setup, Extension
+from distutils.core import setup
 from distutils.command.build_py import build_py
-import os, string
+import os
 from glob import glob
 
 
@@ -19,9 +19,9 @@ class build_py_yapps(build_py):
         return modules
 
     def build_module(self, module, module_file, package):
-        if type(package) is str:
+        if isinstance(package, str):
             package = package.split(".")
-        elif type(package) not in (list, tuple):
+        elif not isinstance(package, (list, tuple)):
             raise TypeError(
                 "'package' must be a string (dot-separated), list, or tuple"
             )
@@ -31,7 +31,7 @@ class build_py_yapps(build_py):
             self.announce("building %s -> %s" % (module_file, outfile))
             os.spawnvp(os.P_WAIT, "yapps", ["yapps", module_file, outfile])
         else:
-            return build_py.build_module(self, module, module_file, package)
+            build_py.build_module(self, module, module_file, package)
 
 
 name = "Novelwriting"

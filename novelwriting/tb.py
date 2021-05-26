@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import traceback, sys
+import sys
+import traceback
 from . import driver
 
 
@@ -27,7 +28,7 @@ def format_one_frame(t):
 
 
 def novelwriting_except_hook(ec, c, t):
-    global gec, gc, gt
+    global gec, gc, gt  # pylint: disable=global-variable-undefined
     gec, gc, gt = ec, c, t
     print("Traceback (most recent call last):")
     while t:

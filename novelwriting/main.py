@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import gram, sys
+import sys
+from . import gram
 
 if len(sys.argv) == 1:
     f = sys.stdin
@@ -13,7 +14,7 @@ prog = f.read()
 parts = prog.split("\n;;\n")
 
 if len(parts) > 1:
-    exec parts[1]
+    exec(parts[1])  # pylint: disable=exec-used
 gram.parse("start", parts[0] + ";;\n")
 
 f.close()
