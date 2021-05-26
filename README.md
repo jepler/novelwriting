@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Jeff Epler
+
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
 # Novelwriting: random structured document generation in Python
 
 Novelwriting is a Python program for rule-based generation of text, similar to the Dada Engine.
@@ -199,4 +205,3 @@ novelwriting.calls: predefined @-calls
 ======================================
 
 There's a library of predefined @-calls in the module 'novelwriting.calls'. Import from it in the code section of your grammar if you want to use them. These are not yet documented, and may change.
-
