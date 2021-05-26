@@ -9,7 +9,7 @@ prog = f.read()
 parts = prog.split("\n;;\n")
 
 if len(parts) > 1:
-    exec parts[1] 
+    exec parts[1]
 gram.parse("start", parts[0] + ";;\n")
 
 f.close()
