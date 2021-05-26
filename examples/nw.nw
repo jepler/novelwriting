@@ -19,7 +19,7 @@ String: @string(0);
 ;;
 import string, random
 
-sname = string.lowercase + string.uppercase + "_"
+sname = string.ascii_lowercase + string.ascii_uppercase + "_"
 mname = sname + "-" + string.digits
 chars = string.printable
 

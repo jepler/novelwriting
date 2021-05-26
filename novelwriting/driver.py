@@ -80,18 +80,19 @@ class Reference(Concatable):
             _anon_ruleno += 1
         self.name = name
         self.args = args
+
     def __str__(self):
         global rules
         rule = rules[self.name]
         if not isinstance(rule, Rule):
             if self.args:
-                raise TypeError, "Rule %s takes no arguments (%s given)" % (
-                    self.name, len(self.args))
+                raise TypeError("Rule %s takes no arguments (%s given)" % (
+                    self.name, len(self.args)))
             return str(rule)
         if len(self.args) != len(rule.args):
-            raise TypeError, "Rule %s takes %s argument%s (%s given)" % (
+            raise TypeError("Rule %s takes %s argument%s (%s given)" % (
                 rule.name, len(rule.args),
-                ["", "s"][len(rule.args) != 1], len(self.args))
+                ["", "s"][len(rule.args) != 1], len(self.args)))
         old_rules = rules.copy()
         for i, name in enumerate(rule.args):
             rules[name] = str(self.args[i])
@@ -156,12 +157,12 @@ if __name__ == '__main__':
     H = "A " + Animal + " and a rabbi walk into a bar"
     Joke = G+"." | H+"." | G+".  "+H+"." | H+".  "+G+"."
     S = Rule("S", (E|F) + "$")
-    print rules
+    print(rules)
 
     for i in range(10):
-        print S
+        print(S)
 
     for i in range(10):
-        print Joke
+        print(Joke)
 
 # vim:sw=4:sts=4:et:

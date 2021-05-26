@@ -86,7 +86,7 @@ make-grade: "Release" | "Beta" | "Beta" | "Alpha";
 ;;
 import random
 from novelwriting.calls import get, set, discard, alternative, cap_first, \
-	random_repeat
+        random_repeat
 
 def make_version_before(num):
     if not isinstance(num, int):
@@ -101,6 +101,6 @@ def prs():
     nums.sort()
     return " ".join(["(PR %d)" % i for i in nums])
 
-if not globals().has_key("link_me"):
+if 'link_me' not in globals():
     def link_me(a, b=None):
         return "<A HREF=\"#\">%s</A>" % str(a)

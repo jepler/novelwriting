@@ -1,20 +1,3 @@
-from driver import Rule, alternatives, sequence, Call, Reference
-import driver
-
-def go(prods):
-    if 'Start' in driver.rules:
-        start_rule = driver.rules['Start']
-    else:
-        start_rule = prods[0]
-    print str(start_rule)
-
-def include(name):
-    name = eval(name, {}, {})
-    f = open(name)
-    try:
-        return parse("included", f.read())
-    finally:
-        f.close()
 
 %%
 parser NovelWriting:
@@ -34,7 +17,7 @@ parser NovelWriting:
 
     rule prod:
         Name opt_params ":" alt ";"
-                                {{ return [Rule(Name, alt, opt_params)] }} |
+                                {{ return Rule(Name, alt, opt_params) }} |
         "include" String        {{ return include(String) }}
 
     rule alt: seq               {{ result = [seq] }}
@@ -57,6 +40,7 @@ parser NovelWriting:
     rule atom: Name opt_args    {{ return Reference(Name, opt_args) }}
         | String                {{ return eval(String, {}, {}) }}
         | '@' dname opt_args    {{ return Call(dname, opt_args) }}
+        | "[(]" alt "[)]"       {{ return alt }}
 
     rule dname: Name            {{ result = [Name] }}
         ( "[.]" Name            {{ result.append(Name) }}) *
@@ -64,13 +48,21 @@ parser NovelWriting:
 
     rule args: arg              {{ result = [arg] }}
         ( "," arg               {{ result.append(arg) }} ) *
-                                {{ return result }}
+        "," ?                   {{ return result }}
 
     rule arg: alt               {{ return alt }}
         | Number                {{ return int(Number) }}
 
     rule opt_args:              {{ result = [] }}
-        ("[(]" args "[)]"       {{ result = args }} )?
+        (
+            "[(]"
+            (
+                arg             {{ result.append(arg) }}
+                ( "," arg       {{ result.append(arg) }} ) *
+                "," ?
+            )?
+            "[)]"    
+        )?
                                 {{ return result }}
 
     rule opt_params:            {{ result = [] }}
@@ -78,8 +70,25 @@ parser NovelWriting:
                                 {{ return result }}
 
     rule params:
-        Name                    {{ result = Name }}
+        Name                    {{ result = [Name] }}
         ( ',' Name              {{ result.append(Name) }} ) *
                                 {{ return result }}
 %%
+from .driver import Rule, alternatives, sequence, Call, Reference
+from . import driver
+
+def go(prods):
+    if 'Start' in driver.rules:
+        start_rule = driver.rules['Start']
+    else:
+        start_rule = prods[0]
+    print(str(start_rule))
+
+def include(name):
+    name = eval(name, {}, {})
+    f = open(name)
+    try:
+        return parse("included", f.read())
+    finally:
+        f.close()
 # vim:sw=4:sts=4:et:

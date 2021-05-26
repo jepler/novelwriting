@@ -199,7 +199,7 @@ info-category-name: @laundry-list(Features, any-info-category-name);
 any-info-category-name: @laundry-list-init(Category) info-category-part "::" info-category-part ["::" info-category-part|""];
 info-category-part: @laundry-list(Category, any-info-category-part);
 any-info-category-part: "Semi-functional" | "Bad Ideas" | "Half-finished" | "Wankage" | "Themable" | "Segfaulting" 
-	| "Homework Assignment" | "Forked" | "Clones" | "Internet" | "Themes";
+        | "Homework Assignment" | "Forked" | "Clones" | "Internet" | "Themes";
 
 info-focus: "Brown paper bag bug" | "Name change due to trademark lawsuit" | "First (and last) release" | "Cry for help" | "Suicide Note" | "Re-wrote in new language" | "Exercise in futility" | "New maintainer" | "Pointless fork";  
 
@@ -281,9 +281,9 @@ def pluralise(s):
 def a_an(s):
     s = str(s)
     if s in ("XHTML", "XML", "xlib", "FTP", "HTTP", "SMTP", "mv", "rm", "ssl", "sh"):
-	return "an " + s
+        return "an " + s
     if s[0] in "aeiou":
-	return "an " + s
+        return "an " + s
     return "a " + s
 
 def upcase_first(s):
@@ -322,12 +322,12 @@ def ten_releases():
 
     r = []
     for i in range(10):
-	if i == rf_entry:
-	    r.append(expand("rf-entry"))
-	elif i == nw_entry:
-	    r.append(expand("nw-entry"))
-	else:
-	    r.append(expand("release"))
+        if i == rf_entry:
+            r.append(expand("rf-entry"))
+        elif i == nw_entry:
+            r.append(expand("nw-entry"))
+        else:
+            r.append(expand("release"))
     return expand("hr").join(r)
 
 # vim:sts=4:sw=4:

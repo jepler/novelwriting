@@ -8,7 +8,7 @@ def set(name, val):
 
 def get(name, default=None):
     name = name.name
-    if not d.has_key(name) and default is not None:
+    if name not in d and default is not None:
         d[name] = str(default)
     return d[name]
 
@@ -62,24 +62,24 @@ def laundry_list(ref, rule):
     return s
 
 def unset(s):
-	s = s.name
-	try:
-		del d[s]
-	except KeyError: pass
-	return ""
+        s = s.name
+        try:
+                del d[s]
+        except KeyError: pass
+        return ""
 
 def if_set(cond, if_true, if_false):
-	if cond.name in d:
-		return str(if_true)
-	return str(if_false)
+        if cond.name in d:
+                return str(if_true)
+        return str(if_false)
 
 def if_eq(a, b, if_true, if_false):
-	a = str(a)
-	b = str(b)
-	if a == b:
-		return str(if_true)
-	else:
-		return str(if_false)
+        a = str(a)
+        b = str(b)
+        if a == b:
+                return str(if_true)
+        else:
+                return str(if_false)
 
 
 def expand(s):
@@ -88,8 +88,8 @@ def expand(s):
         return str(r)
 
 def possessive(s):
-	s = str(s)
-	if s.endswith("s"): return s + "'"
-	return s + "'s"
+        s = str(s)
+        if s.endswith("s"): return s + "'"
+        return s + "'s"
 
 

@@ -47,7 +47,7 @@ through Python.""",
     scripts=['scripts/novelwriting', 'scripts/novelwriting.cgi'],
     data_files=[(DOCDIR + "/examples", glob("examples/*.nw")),
                 (DOCDIR, ["README.html", "novelwriting/gram.g"])],
-#    ext_modules=[Extension("novelwriting.gram", ["novelwriting/gram.g"])],
+    ext_modules=[Extension("novelwriting.gram", ["novelwriting/gram.g"])],
     cmdclass={'build_py': build_py_yapps},
 )
 

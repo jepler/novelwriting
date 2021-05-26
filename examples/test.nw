@@ -3,8 +3,10 @@ S: sayings feature-list;
 sayings: ["They say that " saying "\n"]+;
 
 saying: "the rain in " country " falls mainly in the " 
-	@pluralize(geographic-region) "."
-	| @a-an(moving) " " object " gathers no " (substance|object) ".";
+        @pluralize(geographic-region) "."
+        | @a-an(moving) " " object " gathers no " substance-or-object ".";
+
+substance-or-object: substance | object;
 
 feature-list: @laundry-list-init(Feature) feature-list-inner;
 feature-list-inner: @set(product-name, make-product)" is " @repeat(feature-list-one, 4, ", ") " and " feature-list-one ".  Buy " @get(product-name) " today!";

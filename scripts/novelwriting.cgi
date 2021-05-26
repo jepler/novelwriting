@@ -22,8 +22,8 @@ random.seed(seed)
 def get_seed(): return str(seed)
 def link_me(body, seed=seed):
     return ('<A HREF="%s?s=%s&r=%s">' % (os.environ['SCRIPT_NAME'], f0, seed) +
-	str(body) +
-	"</A>")
+        str(body) +
+        "</A>")
 
 def set_header(h, v): sys.stdout.write("%s: %s\r\n" % (h, v))
 content_type_set = 0
