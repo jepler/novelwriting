@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Jeff Epler
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 Start: @set(this-product, product-name) " is great.  "
     "It's better than " @alternative(product-name, @get(this-product)) ".\n"
     "Buy " @get(this-product) " today!";
@@ -22,4 +26,3 @@ def alternative(rule, excluded):
     while 1:
         s = str(rule)
         if s != e: return s
-

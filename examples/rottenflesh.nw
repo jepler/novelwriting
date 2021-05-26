@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Jeff Epler
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 Start: S;
 
 fm-header:
@@ -54,7 +58,7 @@ release: make-progname make-version make-cloneof
     "</table>"
     "\n" about changes info"\n\n";
 
-title: 
+title:
     "<font size=+1 color=#000000><a href=#>" progname " " version opt-branch "</a></font>\n" ;
 
 make-progname: @ignore(@set(v-progname,new-progname));
@@ -121,17 +125,17 @@ stupid-task-verb: "configure" | "stream" | "organize" | "theme" |
     "share" | "monitor" | "compile" | "translate" | "browse" | "spoof";
 stupid-task-verb-phrase: stupid-task-verb " " [desc-obj | obscure-technology];
 
-about-technology: 
+about-technology:
     "With " progname ", you can " task-adjective " " stupid-task-verb-phrase |
     [progname "'s " | "Its "] @pluralise(obscure-feature) " use " obscure-technology |
     "It uses " obscure-technology " for " @pluralise(obscure-feature) |
-    progname-or-It " " ["also " | ""] [about-using | about-nousing] | 
+    progname-or-It " " ["also " | ""] [about-using | about-nousing] |
     progname-or-It " is " undesirable-feature-adj-list |
     progname-or-It " requires " obscure-technology " " new-version [ " or greater"|""] |
     progname-or-It " " ["also " | ""] strange-claim [" thanks to " obscure-technology|""];
 about-using: ["implements " | "generates " ] ["its "|""] @pluralise(obscure-feature) [" using " obscure-technology | " on the fly"];
 about-nousing: ["uses " | "implements " | "generates " ] ["its own "|""] @pluralise(obscure-feature);
-strange-claim: "whitens your teeth" | "freshens your breath" | 
+strange-claim: "whitens your teeth" | "freshens your breath" |
         "is extraterrestrial in origin" | "stays crunchy in milk" |
         "sings comical songs" | "is safe for children";
 
@@ -141,7 +145,7 @@ obscure-technology: new-progname | buzzword-noun | coreunix-program;
 undesirable-feature-adj-list: undesirable-feature-adj |
     undesirable-feature-adj " and " undesirable-feature-adj |
     undesirable-feature-adj " and " undesirable-feature-adj-list;
-    
+
 undesirable-feature-adj: @laundry-list(Features, any-undesirable-feature-adj);
 any-undesirable-feature-adj: "n-tier" | "skinnable" | "themable" | "bugfree" | "secure by design" | "incompatible with " [@get(v-clone) | coreunix-program | coreunix-protocol | buzzword] ;
 
@@ -184,7 +188,7 @@ info-categories
 "</td>"
 "              <td align=\"center\" valign=\"top\" width=\"20%\"><small>" info-focus "</small></td>"
 "        <td align=\"center\" valign=\"top\" width=\"20%\"><small>" info-license "</small></td>"
-"              <td align=\"center\" valign=\"top\" width=\"20%\"><small>   " info-icons 
+"              <td align=\"center\" valign=\"top\" width=\"20%\"><small>   " info-icons
 "</small></td>"
 "            </tr>"
 "    </table>" ;
@@ -198,10 +202,10 @@ info-one-category:
 info-category-name: @laundry-list(Features, any-info-category-name);
 any-info-category-name: @laundry-list-init(Category) info-category-part "::" info-category-part ["::" info-category-part|""];
 info-category-part: @laundry-list(Category, any-info-category-part);
-any-info-category-part: "Semi-functional" | "Bad Ideas" | "Half-finished" | "Wankage" | "Themable" | "Segfaulting" 
+any-info-category-part: "Semi-functional" | "Bad Ideas" | "Half-finished" | "Wankage" | "Themable" | "Segfaulting"
         | "Homework Assignment" | "Forked" | "Clones" | "Internet" | "Themes";
 
-info-focus: "Brown paper bag bug" | "Name change due to trademark lawsuit" | "First (and last) release" | "Cry for help" | "Suicide Note" | "Re-wrote in new language" | "Exercise in futility" | "New maintainer" | "Pointless fork";  
+info-focus: "Brown paper bag bug" | "Name change due to trademark lawsuit" | "First (and last) release" | "Cry for help" | "Suicide Note" | "Re-wrote in new language" | "Exercise in futility" | "New maintainer" | "Pointless fork";
 
 info-license: "Pants" | "GNU General Public License" | "Bend-Over EULA" | "BSD" | "crapware" | "long and complicated" | "ambiguous" | "infringing";
 
@@ -214,7 +218,7 @@ info-icons:
 ["      <a href=#><img src=\"http://images.freshmeat.net/ignore.gif\" width=\"16\" height=\"16\" alt=\"Ignore\" title=\"Ignore\" border=\"0\"></a>"|""]
 ["      <a href=#><img src=\"http://images.freshmeat.net/rate.gif\" width=\"16\" height=\"16\" alt=\"Rate\" title=\"Rate\" border=\"0\"></a>"|""];
 
-rf-entry: 
+rf-entry:
 "<table> <tr> <td><img src=http://images.freshmeat.net/button.gif><td valign=top><font size=+1 color=#000000><a href=\"http://unpythonic.net/~jepler/novelwriting/examples/rottenflesh.nw\">RottenFlesh 00.0.0</a></font>"
 "<br><small><font color=#999999>by <a href=\"mailto:jepler@unpythonic.net\">Jeff Epler</a></font></small>"
 "</table>"
@@ -235,7 +239,7 @@ rf-entry:
 "</tr>    </table>"
 " " ;
 
-nw-entry: 
+nw-entry:
 "<table> <tr> <td><img src=http://images.freshmeat.net/button.gif><td valign=top><font size=+1 color=#000000><a href=\"http://unpythonic.net/~jepler/novelwriting/\">Novelwriting 0.4.1</a></font>"
 "<br><small><font color=#999999>by <a href=\"mailto:jepler@unpythonic.net\">Jeff Epler</a></font></small>"
 "</table>"

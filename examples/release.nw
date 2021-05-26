@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Jeff Epler
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 # A parody of software release notes for a program I develop
 
 Start:
@@ -51,22 +55,22 @@ relnote-wo-situation:
 common-task: "regenerating details" | "rotating material" | "creating solids"
   | "plotting details" | "loading assemblies";
 
-program-component: "EAD" | "CAD" | "Framing" | "plot" | "DXF export" 
+program-component: "EAD" | "CAD" | "Framing" | "plot" | "DXF export"
   | "detailing" | "design" ;
 
 desirable-behavior: "not crash" | "give a warning" | "be reflected on details" |
     "give an error" | "comply with LRFD" |
     "force the connection to become graphical";
 
-undesirable-behavior: "a Signal 11" | 
-    "the connection becoming graphical" | "a warning dialog" | 
+undesirable-behavior: "a Signal 11" |
+    "the connection becoming graphical" | "a warning dialog" |
     "an error dialog" | "silent failure";
 
 type-of-data: "hole size" | "material thickness" | "setup data";
 
 f-s: "field " | "shop " | "";
 feature: plain-feature | "parametric " plain-feature;
-plain-feature: "holes" | f-s ["welds" | ["tension-control "? "bolts"]] | 
+plain-feature: "holes" | f-s ["welds" | ["tension-control "? "bolts"]] |
     "clip angles" | "wide flanges" | "beams" | "braces" | "joists" |
     "members" | "materials";
 

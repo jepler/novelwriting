@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Jeff Epler
+
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
 <HTML>
 <HEAD>
 <TITLE> Novelwriting: random structured document generation in Python </TITLE>
@@ -34,7 +40,7 @@ $ novelwriting &lt; spam.nw
 </PRE>
 
 <H2>A simple grammar</H2>
-    
+
 <PRE>
 Start: folk-saying;
 folk-saying: person " once said that " folk-saying ".\n";
@@ -115,7 +121,7 @@ rule: Name opt-params ":" alt ";";
 opt-params: NOTHING | "(" Name [ "," Name ]* ")";
 </PRE>
 
-<P>A list of alternatives is separated by "|".  When executing the grammar, 
+<P>A list of alternatives is separated by "|".  When executing the grammar,
 one of the alternatives is selected and sent to the output.
 <PRE>
 alt: seq ["|" seq]*;
@@ -191,7 +197,7 @@ of the rule.  In particular, it can be very hard to see that the problem is due 
 
 <P>You can execute an arbitrary Python function by writing an @-call in
 a production.  The function is called with its arguments, and the return
-value is inserted into the generated output.  If you write an @-call 
+value is inserted into the generated output.  If you write an @-call
 with dashes in the dotted-name part, the dashes are converted to underlines
 to find the function to call.
 

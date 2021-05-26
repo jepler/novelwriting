@@ -1,5 +1,9 @@
 #!/usr/bin/env python2.2
 
+# SPDX-FileCopyrightText: 2021 Jeff Epler
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 SCRIPT_DIR="/home/jepler/public_html/novelwriting-scripts"
 
 import sys, cgi, cgitb, random, os, time
