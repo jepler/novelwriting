@@ -1,0 +1,49 @@
+Start: @flow("Your basic trimp has " desc ", " desc ", and " desc ".");
+
+desc: "the " part " of " @a_an(source)
+    | @a_an(spart) " that would " emotion " " @a_an(source)
+    | pparts " that " relv
+            " " emotion " " @a_an(source);
+
+relv: "would" | "could"|"should"|"might"
+    | "can't" | "wouldn't" | "shouldn't" | "might not";
+
+_part: pparts | spart;
+_spart: "skin" | "intellect" | "head" | "body" | "forehead" | "mohs number"
+    | "wristwatch" | "sled" | "gait" | "stench" | "libido";
+_pparts: "horns" | "eyes" | "organs" | "morals" | "muscles" | "ferrules"
+    | "hooves" | "guile" | "gullability";
+
+_emotion: "elate" | "embarass" | "enrage" | "ennoble" | "exemplify" | "embolden"
+    | "ennervate" | "elect" | "emulsify" | "enrage" | "elevate";
+
+_source: "lumberjack" | "rhino" | "rabbit" | "mermaid" | "centaur" | "fish"
+    | "football player" | "woman" | "man" | "housecat" | "pure bred dog"
+    | "monkey" | "neutron" | "newscaster" | "tardigrade" | "well-kept lawn"
+    | "facist dictatorship" | "the internet";
+
+part: @without_repetition(_part);
+spart: @without_repetition(_spart);
+pparts: @without_repetition(_pparts);
+emotion: @without_repetition(_emotion);
+source: @without_repetition(_source);
+
+;;
+import textwrap
+def flow(rule):
+    s = str(rule)
+    return "\n".join(textwrap.wrap(s))
+
+used = set()
+def without_repetition(rule):
+    for i in range(100):
+        s = str(rule)
+        if s not in used:
+            used.add(s)
+            break
+    return s
+def a_an(rule):
+    s = str(rule)
+    if s.startswith("the "): return s
+    if s[:1] in "aeiouy": return "an " + s
+    return "a " + s
