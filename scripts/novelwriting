@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 import sys
-import novelwriting.gram as gram
+import novelwriting.gram as gram  # pylint: disable=import-error
 
 if len(sys.argv) == 1:
     f = sys.stdin

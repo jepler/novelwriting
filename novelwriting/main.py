@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 import sys
-from . import gram
+from . import gram  # pylint: disable=no-name-in-module
 
 if len(sys.argv) == 1:
     f = sys.stdin
