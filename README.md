@@ -81,7 +81,7 @@ A "Number" (integer) starts with an optional "-" to signify negation, a nonzero 
 Grammar
 -------
 
-The grammar includes other tokens. In the rules below, the required sequence of characters is shown inside quotation marks. "?" follows an optional item, "\*" signals zero-or-more and "+" signals 1 or more of the preceeding item. "\[" and "\]" are used for grouping.
+The grammar includes other tokens. In the rules below, the required sequence of characters is shown inside quotation marks. `?` follows an optional item, `*` signals zero-or-more and `+` signals 1 or more of the preceeding item. `[` and `]` are used for grouping.
 ```
 start: rules ";;" python-code;
 rules: rule+;
@@ -97,8 +97,9 @@ A list of alternatives is separated by `"|"`. When executing the grammar, one of
 ```
 alt: seq ["|" seq]*;
 ```
-A sequence is composed repetitions or groups:
+A sequence is composed of one or more repetitions, which can be atoms or bracketed alternatives:
 ```
+seq: rep+;
 rep: atom rep-tail | "[" alt "]" rep-tail;
 rep-tail: ["*" | "+" | "?"]?
 ```
