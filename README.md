@@ -31,7 +31,7 @@ A simple grammar
 Start: folk-saying;
 folk-saying: person " once said that " folk-saying ".\n";
 person: "My " relative | "The President" | "Cardinal Fang";
-relative: "mother" | "aunt" | "grandmother" ;
+relative: "mother" | "aunt" | "grandmother";
 folk-saying: "a rolling stone gathers no moss"
     | "a stitch in time saves nine"
     | "no-one expects the Spanish Inquisition";
@@ -88,7 +88,7 @@ rules: rule+;
 ```
 The entire grammar is a series of "rules" followed by two semicolons and then additional Python code required by the rules. "python-code" is any sequence of characters up to the end of the file.
 
-A rules has a name, an optional parameter list, and a list of alternatives it produces. A rules that takes parameters is called a "parameterized rule".
+A rule has a name, an optional parameter list, and a list of alternatives it produces. A rules that takes parameters is called a "parameterized rule".
 ```
 rule: Name opt-params ":" alt ";";
 opt-params: NOTHING | "(" Name [ "," Name ]* ")";
@@ -111,7 +111,7 @@ opt-args: NOTHING | "(" seq [ "," seq ]* ")";
 A call is marked by "@", names the function called, and lists the arguments to the function:
 ```
 call: "@" dotted-name "(" args ")";
-args: arg ["," arg]* | NOTHING ;
+args: arg ["," arg]* | NOTHING;
 arg: seq | Number;
 dotted-name: Name ["." Name]*;
 ```
@@ -144,11 +144,11 @@ negative-sentence: food " is nasty-tasting.  I can't stand " food ".\n";
 ```
 Using a predefined @-call, @expand, you can expand the rule with the given name. An example:
 ```
-Start:  sentence-about(animal) ;
-animal: "dog" | "cat" ;
-sentence-about(subject): @expand(subject) " is a " subject ;
-dog: "Fido" | "Spot" ;
-cat: "Tiddles" | "Fluffy" ;
+Start:  sentence-about(animal);
+animal: "dog" | "cat";
+sentence-about(subject): @expand(subject) " is a " subject;
+dog: "Fido" | "Spot";
+cat: "Tiddles" | "Fluffy";
 ;;
 from novelwriting.calls import expand
 ```
