@@ -43,7 +43,6 @@ parser NovelWriting:
     rule atom: Name opt_args    {{ return Reference(Name, opt_args) }}
         | String                {{ return eval(String, {}, {}) }}
         | '@' dname opt_args    {{ return Call(dname, opt_args) }}
-        | "[(]" alt "[)]"       {{ return alt }}
 
     rule dname: Name            {{ result = [Name] }}
         ( "[.]" Name            {{ result.append(Name) }}) *
